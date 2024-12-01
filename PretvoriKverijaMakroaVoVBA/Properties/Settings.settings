@@ -1,0 +1,54 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PretvoriKverijaMakroaVoVBA.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="VID_NA_FAJL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*.sql</Value>
+    </Setting>
+    <Setting Name="IME_NA_IZVEZEN_FAJL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">VOI60_IT1_soopstenie.bas</Value>
+    </Setting>
+    <Setting Name="IME_NA_IZVEZEN_EKSEL_FAJL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">imeXLSFajl.xls</Value>
+    </Setting>
+    <Setting Name="dodajZaIzvozVoEksel" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="PATEKA_IZVEZEN_EKSEL_FAJl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PrimerKverija</Value>
+    </Setting>
+    <Setting Name="SQL_KVERIJA_PAPKA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PrimerKverija</Value>
+    </Setting>
+    <Setting Name="VBA_MAKROA_PAPKA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MakroaKverijaPrimeri</Value>
+    </Setting>
+    <Setting Name="VBA_MAKRO_VID_FAJL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*.bas</Value>
+    </Setting>
+    <Setting Name="iminijaTabeli" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Q_M10|TabelaKveriM10&lt;/string&gt;
+  &lt;string&gt;Q_M1|TabelaKveriM1&lt;/string&gt;
+  &lt;string&gt;Q_M2|TabelaKveriM2&lt;/string&gt;
+  &lt;string&gt;Q_M3|TabelaKveriM3&lt;/string&gt;
+  &lt;string&gt;Q_M4|TabelaKveriM4&lt;/string&gt;
+  &lt;string&gt;Q_M5|TabelaKveriM5&lt;/string&gt;
+  &lt;string&gt;Q_M6|TabelaKveriM6&lt;/string&gt;
+  &lt;string&gt;Q_M7|TabelaKveriM7&lt;/string&gt;
+  &lt;string&gt;Q_M8|TabelaKveriM8&lt;/string&gt;
+  &lt;string&gt;Q_M9|TabelaKveriM9&lt;/string&gt;
+  &lt;string&gt;TabelaVnes|TabelaVnes&lt;/string&gt;
+  &lt;string&gt;TabelaVnes2|TabelaVnes&lt;/string&gt;
+  &lt;string&gt;TabelaAdresar|TabelaAdresar&lt;/string&gt;
+  &lt;string&gt;TabelaAdresar1|TabelaAdresar&lt;/string&gt;
+  &lt;string&gt;Tgodisnik_1|TabelaGodishnik&lt;/string&gt;
+  &lt;string&gt;Tgodisnik_4|TabelaGodishnik4&lt;/string&gt;
+  &lt;string&gt;Tgodisnik_7|TabelaGodishnik7&lt;/string&gt;
+  &lt;string&gt;Tpol|TabelaPol&lt;/string&gt;
+  &lt;string&gt;RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
