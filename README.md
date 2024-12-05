@@ -68,7 +68,7 @@ iminijaTabeli. Пример:
 # Чекор 2 - Извези квериј и макроа од Акцес во текст фајлови и ВБА модули. 
 Извезување на кверија и макроа од Акцес фајлот е прилично едноставно бидејќи Акцес веќе има своја функционалност за намената.
 Се прават три копчиња во Акцес форма, „Извези кверија во текст фајл“, „Извези само макроа во текст фајл“ и „Извези кверија и макроа во текст фајл“. 
-Притоа на клик, треба да се повикаат фунцкиите Utils.ExportQuerySQL(), Utils.PretvoriMakroaVoModuliISnimiNaDisk() и Utils.IzveziKverijaIMakroaVoModuli(), соодветно, како на сликата: ![image](https://github.com/bluePlayer/PretvoriKverijaMakroaVoVBA/sliki/PretvoriKverijaMakroaVoVBA1.png)
+Притоа на клик, треба да се повикаат фунцкиите Utils.ExportQuerySQL(), Utils.PretvoriMakroaVoModuliISnimiNaDisk() и Utils.IzveziKverijaIMakroaVoModuli(), соодветно, како на сликата: ![Извези кверија и макроа од Акцес во текст фајлови и ВБА модули](https://github.com/bluePlayer/PretvoriKverijaMakroaVoVBA/blob/master/PretvoriKverijaMakroaVoVBA/sliki/PretvoriKverijaMakroaVoVBA1.png
 Во ВБА тоа би изгледало од прилика вака:
 
 ```vb
