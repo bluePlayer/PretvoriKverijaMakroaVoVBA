@@ -233,6 +233,9 @@
     <Content Include="sliki\PretvoriKverijaMakroaVoVBA1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="sliki\PretvoriKverijaMakroaVoVBA2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="vba\Utils.bas">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
