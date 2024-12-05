@@ -33,7 +33,7 @@
 од ВБА модулот Utils.bas. 
 Потребно е да се најдат сите табели кои се повикуваат во кверијата и соодветно да се наведе нивна замена во новиот модул кој
 ќе се створи со претворачот. Тоа се прави во фајлот PretvoriKverijaMakroaVoVBA.exe.config.xml во тагот
-iminijaTabeli. Пример:
+iminijaTabeli. Пример:\
 ```xml
 	<setting name="iminijaTabeli" serializeAs="Xml">
                 <value>
@@ -61,17 +61,17 @@ iminijaTabeli. Пример:
                     </ArrayOfString>
                 </value>
             </setting>
-```
+```\
 Тука TabelaKveriM10 ќе биде заменско име за табелата Q_M10, односно, во модулот ќе стане параметар на функцијата која створува дадено квери. Така името на табелата може да се менува по потреба, и секој пат ќе се створи квери со новото име на табелата, пратено како параметар на функцијата. 
 Потребно е да се излистаат сите табели, и нивни замески имиња. Ако едно име се содржи во друго име, да се излиста прво тоа што содржи и други букви. За сега заменувањето на дадени табели ќе се изврши онлку пати колку што има повторувања на име на табела во друго име на табела. Ова е дефект. Ќе додадат неколку пати истите имиња на табели како параметар на функциите во модулот. Така ќе треба рачно да се поправи и да се избришат дупликат параметрите. 
 Претворачот ќе работи и доколку не се наведат имиња на табели, но тие нема да бидат заменливи. 
 # Чекор 2 - Извези квериј и макроа од Акцес во текст фајлови и ВБА модули. 
 Извезување на кверија и макроа од Акцес фајлот е прилично едноставно бидејќи Акцес веќе има своја функционалност за намената.
 Се прават три копчиња во Акцес форма, „Извези кверија во текст фајл“, „Извези само макроа во текст фајл“ и „Извези кверија и макроа во текст фајл“. 
-Притоа на клик, треба да се повикаат фунцкиите Utils.ExportQuerySQL(), Utils.PretvoriMakroaVoModuliISnimiNaDisk() и Utils.IzveziKverijaIMakroaVoModuli(), соодветно, како на сликата:
+Притоа на клик, треба да се повикаат фунцкиите Utils.ExportQuerySQL(), Utils.PretvoriMakroaVoModuliISnimiNaDisk() и Utils.IzveziKverijaIMakroaVoModuli(), соодветно, како на сликата:\
 ![Извези кверија и макроа од Акцес во текст фајлови и ВБА модули](https://github.com/bluePlayer/PretvoriKverijaMakroaVoVBA/blob/master/PretvoriKverijaMakroaVoVBA/sliki/PretvoriKverijaMakroaVoVBA1.png)
-
-Во ВБА тоа би изгледало од прилика вака:
+\
+Во ВБА тоа би изгледало од прилика вака:\
 
 ```vb
 Private Sub izveziKverijaVoTekstBtn_Click()
@@ -85,19 +85,19 @@ End Sub
 Private Sub izveziMakroaVoTekstBtn_Click()
     Utils.PretvoriMakroaVoModuliISnimiNaDisk (Konstanti.MAKROA_PATEKA_ZA_IZVEZUVANJE)
 End Sub
-```
+```\
 
-Каде Konstanti.bas е модул во Акцес кој ги содржи констатите KVERIJA_PATEKA_ZA_IZVEZUVANJE, KVERIJA_I_MAKROA_PATEKA_ZA_IZVEZUVANJE и MAKROA_PATEKA_ZA_IZVEZUVANJE. од прилика вака:
+Каде Konstanti.bas е модул во Акцес кој ги содржи констатите KVERIJA_PATEKA_ZA_IZVEZUVANJE, KVERIJA_I_MAKROA_PATEKA_ZA_IZVEZUVANJE и MAKROA_PATEKA_ZA_IZVEZUVANJE. од прилика вака:\
 
 ```vb
 Public Const KVERIJA_PATEKA_ZA_IZVEZUVANJE As String = "C:\Users\user1\Documents\output\kverija\"
 Public Const MAKROA_PATEKA_ZA_IZVEZUVANJE As String = "C:\Users\user1\Documents\output\makroa\"
 Public Const KVERIJA_I_MAKROA_PATEKA_ZA_IZVEZUVANJE As String = "C:\Users\user1\Documents\output\kverija_makroa\"
-```
+```\
 - Функцијата Utils.ExportQuerySQL (Konstanti.KVERIJA_PATEKA_ZA_IZVEZUVANJE) ги извезува само кверијата од Акцес во текст фајл со соодветното име. 
 - Функцијата Utils.IzveziKverijaIMakroaVoModuli (Konstanti.KVERIJA_I_MAKROA_PATEKA_ZA_IZVEZUVANJE) ги извезува макроата во ВБА модули како засебен фајл на диск со соодветното име, но претходно, секое макро го претвора во ВБА модул во самиот Акцес со претставка „Converted macro- “. При секое претворање се појавува мал дијалог прозор на кој се притиска Ентер и не може да се избегне. Но, ова се прави само еднаш. 
 - Функцијата Utils.PretvoriMakroaVoModuliISnimiNaDisk (Konstanti.MAKROA_PATEKA_ZA_IZVEZUVANJE) ги ствара ВБА модулите со име „Converted macro- imeNaMakro“ во Акцес (се појавува дијалог прозор на кој се притиска Ентер.), додава папка на диск со името на макрото, го снима ВБА модулот на макрото „imeNaMakro.bas“ во истоимената папка, и потоа со овој модул се служи да најде кои кверија му припаѓаат на макрото, така што модулот кој ќе се створи од кверијата ќе се сними во соодветната папка на макрото. Ова многу го олеснува процесот да се претвори макро во модул со динамички ескуел код. За сега експериментален код. 
-- Постои продобрување на кодот, така што во ВБА модулот на диск наредбата 
+- Постои продобрување на кодот, така што во ВБА модулот на диск наредбата\ 
 ```vb
 DoCmd.OpenQuery imeNaKveri, acNormal, acEdit 
 ```
@@ -111,7 +111,76 @@ DoCmd.RunSQL imeNaKveri_sql(lista na tabeli)
 - Претворачот е конзолна апликација. Доколки сите ставки се наместени како што треба, се извршува само со двоен клик или во командна линија, со влез во папката каде се наоѓа PretvoriKverijaMakroaVoVBA.exe. При извршување, прво ќе се створи модул за самите кверија. Колку што има кверија во наведената папка толку функции ќе се додадат во модулот. При извршување претворачот прави некое основно форматирање, па ако се многу кверија, кои се прилично долги, крајниот фајл може да биде неколку илјади линии. Затоа е добро да се поделат кверијата во една папка кои се повикуваат во дадено макро. 
 Но, ова може да биде долга и здодевна задача, особено ако се многу макроа со многу кверија во себе. 
 За таа цел, вториот дел на извршување, откако ќе се притисне копче на тастатурата, се наоѓаат макроата по име и во нив се бараат керијата по име. Ако макроата извезени од претходно со претставка („Converted macro- “) содржат име на дадено на квери во себе, тоа ќе се сними во папка со име на макрото. Притоа ќе се створи нов модул со исто име на макрото каде ќе бидат кверијата како динамички ескуел код. Овој дел е експериментален и потребно е веќе во папката на макрото, да постои модулот на макрото извезен од претходно како \*.bas фајл, пример Converted macro- imeNaMakro.bas. Но, извезувањето на макроата од Акцес во ВБА модул се прави автоматски, со повикување на функцијата Utils.PretvoriMakroaVoModuliISnimiNaDisk(). 
-Претворањето од прилика изгледа вака:
-![Користење на претворачот](https://github.com/bluePlayer/PretvoriKverijaMakroaVoVBA/blob/master/PretvoriKverijaMakroaVoVBA/sliki/PretvoriKverijaMakroaVoVBA2.png)
-Во случајов, вториот дел, претворање на макроа и кверија во ВБА модули со динамички ескуел код не успеа затоа што во папката на макрото Macro5 не постоеше ВБА модул со име, Macro5.bas. Со извезување на истиот, ќе се створи нов модул со име Macro5_module.bas кој ќе ги содржи кверијата како динамички ескуел, притоа, е модул кој ги содржи само кверијата кои се повикуваат во истоименото макро во Акцес, и се наоѓа во своја соодветна папка. 
+Претворањето од прилика изгледа вака:\
+![Користење на претворачот](https://github.com/bluePlayer/PretvoriKverijaMakroaVoVBA/blob/master/PretvoriKverijaMakroaVoVBA/sliki/PretvoriKverijaMakroaVoVBA2.png)\
+Во случајов, вториот дел, претворање на макроа и кверија во ВБА модули со динамички ескуел код не успеа затоа што во папката на макрото Macro5 не постоеше ВБА модул со име, Macro5.bas. Со извезување на истиот, ќе се створи нов модул со име Macro5_module.bas кој ќе ги содржи кверијата како динамички ескуел, притоа, е модул кој ги содржи само кверијата кои се повикуваат во истоименото макро во Акцес, и се наоѓа во своја соодветна папка.\
 ![Користење на претворачот - 2](https://github.com/bluePlayer/PretvoriKverijaMakroaVoVBA/blob/master/PretvoriKverijaMakroaVoVBA/sliki/PretvoriKverijaMakroaVoVBA3.png)
+\
+- Macro5.bas изгледа вака\ 
+
+```vb
+Option Compare Database
+
+'------------------------------------------------------------
+' Macro5
+'
+'------------------------------------------------------------
+Function Macro5()
+On Error GoTo Macro5_Err
+
+    DoCmd.SetWarnings False
+    DoCmd.OpenQuery "Regioni_0", acViewNormal, acEdit
+    DoCmd.OpenQuery "Regioni_01", acViewNormal, acEdit
+    DoCmd.OpenReport "Regioni", acViewPreview, "", ""
+
+
+Macro5_Exit:
+    Exit Function
+
+Macro5_Err:
+    MsgBox Error$
+    Resume Macro5_Exit
+
+End Function
+```
+додека модулот кој ќе се створи во папката Macro5, Macro5_module.bas изгледа вака:
+```vb
+Public Function Regioni_0_sql(ByVal TabelaVnes As String , ByVal TabelaNasMesta As String ) As String
+  Dim sql as String
+  sql = sql & "SELECT ""[V-50 "" AS OBRAZEC, " & vbNewLine
+  sql = sql & "" & TabelaVnes & ".GOD, " & vbNewLine
+  sql = sql & """0"" AS REGIONID, " & vbNewLine
+  sql = sql & """Republika Makedonija"" AS REGION, " & vbNewLine
+  sql = sql & "Count(" & TabelaVnes & ".OBRAZEC) AS SE, " & vbNewLine
+  sql = sql & "Sum(IIf([pol]=""1"",1,0)) AS Mazi, " & vbNewLine
+  sql = sql & "Sum(IIf([pol]=""2"",1,0)) AS [, " & vbNewLine
+  sql = sql & "eni], " & vbNewLine
+  sql = sql & "" & TabelaVnes & ".ZDRZAVA INTO Regioni_1 " & vbNewLine
+  sql = sql & "FROM " & TabelaVnes & " LEFT JOIN " & TabelaNasMesta & " ON " & TabelaVnes & ".ZNASMES = " & TabelaNasMesta & ".NASID" & vbNewLine
+  sql = sql & "GROUP BY ""[V-50 "", " & TabelaVnes & ".GOD, ""0"", ""Republika Makedonija"", " & TabelaVnes & ".ZDRZAVA" & vbNewLine
+  sql = sql & "HAVING (((" & TabelaVnes & ".ZDRZAVA)=""807""));" & vbNewLine
+  sql = sql & "" & vbNewLine
+  sql = sql & "" & vbNewLine
+  Regioni_0_sql = sql
+End Function
+
+Public Function Regioni_01_sql(ByVal TabelaVnes As String , ByVal TabelaNasMesta As String ) As String
+  Dim sql as String
+  sql = sql & "INSERT INTO Regioni_1 ( OBRAZEC, GOD, REGIONID, REGION, SE, Mazi, [@eni], ZDRZAVA )" & vbNewLine
+  sql = sql & "SELECT ""[V-50 "" AS OBRAZEC, " & vbNewLine
+  sql = sql & "" & TabelaVnes & ".GOD, " & vbNewLine
+  sql = sql & "" & TabelaNasMesta & ".REGIONID AS Expr1, " & vbNewLine
+  sql = sql & "" & TabelaNasMesta & ".REGION AS Expr2, " & vbNewLine
+  sql = sql & "Count(" & TabelaVnes & ".OBRAZEC) AS CountOfOBRAZEC, " & vbNewLine
+  sql = sql & "Sum(IIf([pol]=""1"",1,0)) AS Mazi, " & vbNewLine
+  sql = sql & "Sum(IIf([pol]=""2"",1,0)) AS [, " & vbNewLine
+  sql = sql & "eni], " & vbNewLine
+  sql = sql & "" & TabelaVnes & ".ZDRZAVA " & vbNewLine
+  sql = sql & "FROM " & TabelaVnes & " INNER JOIN " & TabelaNasMesta & " ON " & TabelaVnes & ".ZNASMES = " & TabelaNasMesta & ".NASID" & vbNewLine
+  sql = sql & "GROUP BY ""[V-50 "", " & TabelaVnes & ".GOD, " & TabelaNasMesta & ".REGIONID, " & TabelaNasMesta & ".REGION, " & TabelaVnes & ".ZDRZAVA" & vbNewLine
+  sql = sql & "HAVING (((" & TabelaVnes & ".ZDRZAVA)=""807""));" & vbNewLine
+  sql = sql & "" & vbNewLine
+  sql = sql & "" & vbNewLine
+  Regioni_01_sql = sql
+End Function
+```\
