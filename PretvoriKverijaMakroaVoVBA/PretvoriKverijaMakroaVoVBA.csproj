@@ -230,7 +230,9 @@
     <Content Include="PrimerKverija\Q_M9_1.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="sliki\PretvoriKverijaMakroaVoVBA1.png" />
+    <Content Include="sliki\PretvoriKverijaMakroaVoVBA1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="vba\Utils.bas">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
