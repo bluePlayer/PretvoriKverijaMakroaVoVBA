@@ -123,25 +123,25 @@ namespace PretvoriKverijaMakroaVoVBA.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>Q_M10|TabelaKveriM10</string>
-  <string>Q_M1|TabelaKveriM1</string>
-  <string>Q_M2|TabelaKveriM2</string>
-  <string>Q_M3|TabelaKveriM3</string>
-  <string>Q_M4|TabelaKveriM4</string>
-  <string>Q_M5|TabelaKveriM5</string>
-  <string>Q_M6|TabelaKveriM6</string>
-  <string>Q_M7|TabelaKveriM7</string>
-  <string>Q_M8|TabelaKveriM8</string>
-  <string>Q_M9|TabelaKveriM9</string>
-  <string>TabelaVnes|TabelaVnes</string>
-  <string>TabelaVnes2|TabelaVnes</string>
-  <string>TabelaAdresar|TabelaAdresar</string>
-  <string>TabelaAdresar1|TabelaAdresar</string>
-  <string>Tgodisnik_1|TabelaGodishnik</string>
-  <string>Tgodisnik_4|TabelaGodishnik4</string>
-  <string>Tgodisnik_7|TabelaGodishnik7</string>
-  <string>Tpol|TabelaPol</string>
-  <string>RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50</string>
+  <string>Q_M10|TabelaKveriM10|1</string>
+  <string>Q_M1|TabelaKveriM1|1</string>
+  <string>Q_M2|TabelaKveriM2|1</string>
+  <string>Q_M3|TabelaKveriM3|1</string>
+  <string>Q_M4|TabelaKveriM4|1</string>
+  <string>Q_M5|TabelaKveriM5|1</string>
+  <string>Q_M6|TabelaKveriM6|1</string>
+  <string>Q_M7|TabelaKveriM7|1</string>
+  <string>Q_M8|TabelaKveriM8|1</string>
+  <string>Q_M9|TabelaKveriM9|1</string>
+  <string>TabelaVnes|TabelaVnes|0</string>
+  <string>TabelaVnes2|TabelaVnes|0</string>
+  <string>TabelaAdresar|TabelaAdresar|0</string>
+  <string>TabelaAdresar1|TabelaAdresar|0</string>
+  <string>Tgodisnik_1|TabelaGodishnik|1</string>
+  <string>Tgodisnik_4|TabelaGodishnik4|1</string>
+  <string>Tgodisnik_7|TabelaGodishnik7|1</string>
+  <string>Tpol|TabelaPol|1</string>
+  <string>RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50|0</string>
 </ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection iminijaTabeli {
             get {

@@ -29,25 +29,25 @@
     <Setting Name="iminijaTabeli" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;Q_M10|TabelaKveriM10&lt;/string&gt;
-  &lt;string&gt;Q_M1|TabelaKveriM1&lt;/string&gt;
-  &lt;string&gt;Q_M2|TabelaKveriM2&lt;/string&gt;
-  &lt;string&gt;Q_M3|TabelaKveriM3&lt;/string&gt;
-  &lt;string&gt;Q_M4|TabelaKveriM4&lt;/string&gt;
-  &lt;string&gt;Q_M5|TabelaKveriM5&lt;/string&gt;
-  &lt;string&gt;Q_M6|TabelaKveriM6&lt;/string&gt;
-  &lt;string&gt;Q_M7|TabelaKveriM7&lt;/string&gt;
-  &lt;string&gt;Q_M8|TabelaKveriM8&lt;/string&gt;
-  &lt;string&gt;Q_M9|TabelaKveriM9&lt;/string&gt;
-  &lt;string&gt;TabelaVnes|TabelaVnes&lt;/string&gt;
-  &lt;string&gt;TabelaVnes2|TabelaVnes&lt;/string&gt;
-  &lt;string&gt;TabelaAdresar|TabelaAdresar&lt;/string&gt;
-  &lt;string&gt;TabelaAdresar1|TabelaAdresar&lt;/string&gt;
-  &lt;string&gt;Tgodisnik_1|TabelaGodishnik&lt;/string&gt;
-  &lt;string&gt;Tgodisnik_4|TabelaGodishnik4&lt;/string&gt;
-  &lt;string&gt;Tgodisnik_7|TabelaGodishnik7&lt;/string&gt;
-  &lt;string&gt;Tpol|TabelaPol&lt;/string&gt;
-  &lt;string&gt;RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50&lt;/string&gt;
+  &lt;string&gt;Q_M10|TabelaKveriM10|1&lt;/string&gt;
+  &lt;string&gt;Q_M1|TabelaKveriM1|1&lt;/string&gt;
+  &lt;string&gt;Q_M2|TabelaKveriM2|1&lt;/string&gt;
+  &lt;string&gt;Q_M3|TabelaKveriM3|1&lt;/string&gt;
+  &lt;string&gt;Q_M4|TabelaKveriM4|1&lt;/string&gt;
+  &lt;string&gt;Q_M5|TabelaKveriM5|1&lt;/string&gt;
+  &lt;string&gt;Q_M6|TabelaKveriM6|1&lt;/string&gt;
+  &lt;string&gt;Q_M7|TabelaKveriM7|1&lt;/string&gt;
+  &lt;string&gt;Q_M8|TabelaKveriM8|1&lt;/string&gt;
+  &lt;string&gt;Q_M9|TabelaKveriM9|1&lt;/string&gt;
+  &lt;string&gt;TabelaVnes|TabelaVnes|0&lt;/string&gt;
+  &lt;string&gt;TabelaVnes2|TabelaVnes|0&lt;/string&gt;
+  &lt;string&gt;TabelaAdresar|TabelaAdresar|0&lt;/string&gt;
+  &lt;string&gt;TabelaAdresar1|TabelaAdresar|0&lt;/string&gt;
+  &lt;string&gt;Tgodisnik_1|TabelaGodishnik|1&lt;/string&gt;
+  &lt;string&gt;Tgodisnik_4|TabelaGodishnik4|1&lt;/string&gt;
+  &lt;string&gt;Tgodisnik_7|TabelaGodishnik7|1&lt;/string&gt;
+  &lt;string&gt;Tpol|TabelaPol|1&lt;/string&gt;
+  &lt;string&gt;RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50|0&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
   </Settings>

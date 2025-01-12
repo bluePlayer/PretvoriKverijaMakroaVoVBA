@@ -38,12 +38,14 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     List<string> iminijaTabeli = new List<string>();
                     List<string> zamenaIminjaTabeli = new List<string>();
+                    List<bool> daliEMegjuTabelaLista = new List<bool>();
 
                     foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
                     {
                         string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
                         iminijaTabeli.Add(parTabeli[0]);
                         zamenaIminjaTabeli.Add(parTabeli[1]);
+                        daliEMegjuTabelaLista.Add(parTabeli[2] == "1");
                     }
 
                     Console.WriteLine("Rabotam vo papka: " + di.Name);
@@ -115,10 +117,29 @@ namespace PretvoriKverijaMakroaVoVBA
                                     }
                                 }
                             }
+
+                            if (!writeLines.ToString().Contains("Call brishiMegjuTabeli()"))
+                            {
+                                writeLines.Append("    'Call brishiMegjuTabeli()" + Environment.NewLine + Environment.NewLine);
+                            }
                         }
                     }
 
-                    File.AppendAllText(di.FullName + "\\" + moduleFileName, writeLines.ToString());
+                    File.AppendAllText(di.FullName + "\\" + moduleFileName, writeLines.ToString() + Environment.NewLine);
+
+                    StringBuilder dropTablesSB = new StringBuilder();
+
+                    dropTablesSB.Append("Public Sub brishiMegjuTabeli()" + Environment.NewLine);
+
+                    for(int i = 0; i < zamenaIminjaTabeli.Count; i += 1)
+                    {
+                        if (daliEMegjuTabelaLista[i])
+                            dropTablesSB.Append("DoCmd.RunSQL \"drop table " + zamenaIminjaTabeli[i] + "\"" + Environment.NewLine);
+                    }
+
+                    dropTablesSB.Append("End Sub" + Environment.NewLine);
+
+                    File.AppendAllText(di.FullName + "\\" + moduleFileName, dropTablesSB.ToString());
 
                     Console.WriteLine("Zavrshiv so pretvaranje na kverijata vo VBA kod, fajl: " + moduleFileName);
                 }
