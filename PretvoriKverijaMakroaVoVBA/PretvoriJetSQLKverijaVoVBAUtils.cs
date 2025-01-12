@@ -92,22 +92,33 @@ namespace PretvoriKverijaMakroaVoVBA
                         }
                         else
                         {
-                            sqlKverijaFajlovi = di.GetFiles(Properties.Settings.Default.VID_NA_FAJL);
-
                             foreach (FileInfo file in sqlKverijaFajlovi)
                             {
                                 foreach (string modulLinija in modulLinii)
                                 {
                                     if (modulLinija.Contains("Public Function " + file.Name.Replace(".", "_")))
                                     {
-                                        writeLines.Append(modulLinija + Environment.NewLine);
+                                        string metodPotpis = 
+                                            modulLinija
+                                                .Replace("Public Function ", "")
+                                                .Replace("ByVal", "")
+                                                .Replace("As String", "");
+
+                                        string modulIMetoda = fileName + "_module." + metodPotpis;
+
+                                        if (!writeLines.ToString().Contains(modulIMetoda))
+                                        {
+                                            writeLines.Append("    Debug.Print " + modulIMetoda + Environment.NewLine);
+                                            writeLines.Append("    DoCmd.RunSQL " + modulIMetoda + Environment.NewLine);
+                                            writeLines.Append(Environment.NewLine);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
 
-                    Console.WriteLine(writeLines.ToString());
+                    File.AppendAllText(di.FullName + "\\" + moduleFileName, writeLines.ToString());
 
                     Console.WriteLine("Zavrshiv so pretvaranje na kverijata vo VBA kod, fajl: " + moduleFileName);
                 }
