@@ -133,7 +133,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     for(int i = 0; i < zamenaIminjaTabeli.Count; i += 1)
                     {
-                        if (daliEMegjuTabelaLista[i])
+                        if (daliEMegjuTabelaLista[i] && newFileBuilder.ToString().Contains(zamenaIminjaTabeli[i]))
                             dropTablesSB.Append("DoCmd.RunSQL \"drop table " + zamenaIminjaTabeli[i] + "\"" + Environment.NewLine);
                     }
 
