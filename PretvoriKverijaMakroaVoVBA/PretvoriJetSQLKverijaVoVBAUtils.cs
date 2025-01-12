@@ -12,6 +12,15 @@ namespace PretvoriKverijaMakroaVoVBA
         public const char SPEC_KARAKTER_ZA_ZAMENA = '@';
         public const char ODDELUVACH_ZA_IMINJA_NA_TABELI = '|';
 
+        /// <summary>
+        /// Pretvora kverija vo VBA modul zavisno od postoechki papki na makroa. 
+        /// Ako dadeno kveri ima ime koe se sodrzhi vo lista na kverija koi se povikuvaat
+        /// od dadeno makro, istoto kveri kje se pretvori vo funkcija vo VBA modul (modulot ima ime kako
+        /// makroto). Ova znachi deka vo papkata so ime na makroto, kje postoi VBA modul vo koj ima
+        /// kverija/methodi so iminja na kverijata koi se povikuvaat vo samoto makro. 
+        /// No potrebno e da postojat makroata izvezeni od prethodno kako VBA modul od samiot Akces fajl. 
+        /// Taka noviot modul kje se vika ime_na_makro_module.bas, so nastavkata "_module". 
+        /// </summary>
         public static void IzvrshiPretvoranjeMakroaIKverija()
         {
             try
@@ -110,7 +119,12 @@ namespace PretvoriKverijaMakroaVoVBA
 
             Console.ReadLine();
         }
-
+        
+        /// <summary>
+        /// Pretvora lista na kverija koi se vo tekstualen format vo dadena papka, vo VBA modul.
+        /// Ako ima 100 kverija, kje gi pretvori vo eden VBA modul so 100 funkcii koi vrakjaat SQL string 
+        /// (dinamichki SQL). 
+        /// </summary>
         public static void IzvrshiPretvoranje()
         {
             try
