@@ -289,7 +289,7 @@ namespace PretvoriKverijaMakroaVoVBA
             {
                 if (kveri.Contains(zamena))
                 {
-                    if (!redMetoda.ToString().Contains(zamena))
+                    if (Regex.Matches(redMetoda.ToString(), "OU=" + zamena).Count == 0)
                     {
                         redMetoda.Append("ByVal " + zamena + " As String ");
 
