@@ -52,6 +52,21 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     Console.WriteLine("Rabotam vo papka: " + di.Name);
 
+                    moduleFileName = fileName + "_module.bas";
+
+                    // gi stava konstantite pred da se vmetne kodot na glavnata makro-funkcija
+                    StringBuilder iminjaTabeliKonstanti = new StringBuilder();
+
+                    foreach (string imeTabelaZamena in zamenaIminjaTabeli)
+                    {
+                        iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
+                    }
+
+                    iminjaTabeliKonstanti.Append(Environment.NewLine);
+
+                    File.WriteAllText(di.FullName + "\\" + moduleFileName, iminjaTabeliKonstanti.ToString());
+
+                    // gi pretvora kverijata vo funkcii
                     foreach (FileInfo file in sqlKverijaFajlovi)
                     {
                         string contents = File.ReadAllText(file.FullName);
@@ -71,9 +86,7 @@ namespace PretvoriKverijaMakroaVoVBA
                         Console.WriteLine("Pretvoriv: " + file.Name + " vo VBA kod! ");
                     }
 
-                    moduleFileName = fileName + "_module.bas";
-
-                    File.WriteAllText(di.FullName + "\\" + moduleFileName, newFileBuilder.ToString());
+                    File.AppendAllText(di.FullName + "\\" + moduleFileName, newFileBuilder.ToString());
 
                     FileInfo[] vbaModuliFajlovi = di.GetFiles("*.bas").OrderBy(fi => fi.Name).ToArray();
 
@@ -82,19 +95,6 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     string modulSodrzhina = File.ReadAllText(vbaModuliFajlovi[1].FullName);
                     string[] modulLinii = modulSodrzhina.Split('\n');
-
-                    // gi stava konstantite pred da se vmetne kodot na glavnata makro-funkcija
-                    // iako nema da iskompajlira. Treba da se skroz gore za da VBA vo Akces kompajlira
-                    StringBuilder iminjaTabeliKonstanti = new StringBuilder();
-
-                    foreach (string imeTabelaZamena in zamenaIminjaTabeli)
-                    {
-                        iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
-                    }
-
-                    iminjaTabeliKonstanti.Append(Environment.NewLine);
-
-                    File.AppendAllText(di.FullName + "\\" + moduleFileName, iminjaTabeliKonstanti.ToString());
 
                     // ostanati linii na makroto
                     StringBuilder writeLines = new StringBuilder();
@@ -362,7 +362,7 @@ namespace PretvoriKverijaMakroaVoVBA
                 }
                 else
                 {
-                    if (dodajZaIzvozVoEksel && row.ToUpper().Contains("FROM"))
+                    if (!kveri.ToUpper().Contains("INTO") && row.ToUpper().Contains("FROM"))
                     {
                         if (!Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(null) && !Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(string.Empty))
                             patekaEksel = Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Replace("\\\\", "\\");
@@ -379,7 +379,7 @@ namespace PretvoriKverijaMakroaVoVBA
                         ishod.Append(tab + "sql = sql & \"INTO [\" & " + imeRabotenList + " & \"] IN ''[Excel 8.0;Database=" + patekaEksel + imeIzlezenEkselFajl + "] \"\n");
                     }
 
-                    ishod.Append(tab + "sql = sql & \"" + row.Replace("\r", "") + "\" & vbNewLine\n");
+                    ishod.Append(tab + "sql = sql & \"" + row.Replace("\r", "") + " \" & vbNewLine\n");
                 }
             }
 
