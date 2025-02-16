@@ -216,6 +216,12 @@ namespace PretvoriKverijaMakroaVoVBA
             }
         }
 
+        public static string ZameniCelZbor(string input, string find, string replace, bool matchWholeWord)
+        {
+            string textToFind = matchWholeWord ? string.Format(@"\b{0}\b", find) : find;
+            return Regex.Replace(input, textToFind, replace);
+        }
+
         public static string Pretvori(
             string methodName, 
             string kveri, 
@@ -231,8 +237,6 @@ namespace PretvoriKverijaMakroaVoVBA
             string[] rows;
             int i = 0;
             int k = 0;
-            string pattern = @"\btest\b";
-            string replace = "text";
 
             if (patekaEksel == null || patekaEksel.Equals(string.Empty))
                 patekaEksel = Environment.CurrentDirectory;
@@ -268,9 +272,8 @@ namespace PretvoriKverijaMakroaVoVBA
 
             foreach (string imeTabela in iminijaTabeli)
             {
-                pattern = @"\b" + imeTabela + "\b";
-                //kveri = Regex.Replace(kveri, pattern, "\" & " + zamenaIminjaTabeli[i] + " & \"");
-                kveri = kveri.Replace(imeTabela, "\" & " + zamenaIminjaTabeli[i] + " & \"");
+                kveri = ZameniCelZbor(kveri, imeTabela, "\" & " + zamenaIminjaTabeli[i] + " & \"", true);
+                //kveri = kveri.Replace(imeTabela, "\" & " + zamenaIminjaTabeli[i] + " & \"");
                 i += 1;
             }
 
