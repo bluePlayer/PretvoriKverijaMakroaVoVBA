@@ -83,6 +83,20 @@ namespace PretvoriKverijaMakroaVoVBA
                     string modulSodrzhina = File.ReadAllText(vbaModuliFajlovi[1].FullName);
                     string[] modulLinii = modulSodrzhina.Split('\n');
 
+                    // gi stava konstantite pred da se vmetne kodot na glavnata makro-funkcija
+                    // iako nema da iskompajlira. Treba da se skroz gore za da VBA vo Akces kompajlira
+                    StringBuilder iminjaTabeliKonstanti = new StringBuilder();
+
+                    foreach (string imeTabelaZamena in zamenaIminjaTabeli)
+                    {
+                        iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
+                    }
+
+                    iminjaTabeliKonstanti.Append(Environment.NewLine);
+
+                    File.AppendAllText(di.FullName + "\\" + moduleFileName, iminjaTabeliKonstanti.ToString());
+
+                    // ostanati linii na makroto
                     StringBuilder writeLines = new StringBuilder();
 
                     // TODO da se dovrshi ova, pechati po povekje pati edno isto
@@ -110,6 +124,19 @@ namespace PretvoriKverijaMakroaVoVBA
                                                 .Replace("ByVal", "")
                                                 .Replace("As String", "");
 
+                                        // gi zamenuva parametrite vo povikot na funkciite so iminjata na konstantite
+                                        int pochetok = metodPotpis.IndexOf('(');
+                                        int kraj = metodPotpis.IndexOf(')');
+                                        string del1 = metodPotpis.Substring(0, pochetok);
+                                        string del2 = metodPotpis.Substring(pochetok);
+
+                                        foreach (string imeTabelaZamena in zamenaIminjaTabeli)
+                                        {
+                                            del2 = del2.Replace(imeTabelaZamena, PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper());
+                                        }
+
+                                        metodPotpis = del1 + del2;
+
                                         string modulIMetoda = fileName + "_module." + metodPotpis;
 
                                         if (!writeLines.ToString().Contains(modulIMetoda))
@@ -134,17 +161,6 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     File.AppendAllText(di.FullName + "\\" + moduleFileName, writeLines.ToString() + Environment.NewLine);
 
-                    StringBuilder iminjaTabeliKonstanti = new StringBuilder();
-
-                    foreach(string imeTabelaZamena in  zamenaIminjaTabeli)
-                    {
-                        iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
-                    }
-
-                    iminjaTabeliKonstanti.Append(Environment.NewLine);
-
-                    File.AppendAllText(di.FullName + "\\" + moduleFileName, iminjaTabeliKonstanti.ToString());
-
                     StringBuilder dropTablesSB = new StringBuilder();
 
                     dropTablesSB.Append("Public Sub brishiMegjuTabeli()" + Environment.NewLine);
@@ -152,7 +168,7 @@ namespace PretvoriKverijaMakroaVoVBA
                     for(int i = 0; i < zamenaIminjaTabeli.Count; i += 1)
                     {
                         if (daliEMegjuTabelaLista[i] && newFileBuilder.ToString().Contains(zamenaIminjaTabeli[i]))
-                            dropTablesSB.Append("    DoCmd.RunSQL \"drop table " + zamenaIminjaTabeli[i] + "\"" + Environment.NewLine);
+                            dropTablesSB.Append("    DoCmd.RunSQL \"drop table \" & " + PRETSTAVKA_IME_TABELA_KONSTANTA + zamenaIminjaTabeli[i].ToUpper() + Environment.NewLine);
                     }
 
                     dropTablesSB.Append("End Sub" + Environment.NewLine);
