@@ -98,8 +98,6 @@ namespace PretvoriKverijaMakroaVoVBA
 
                             foreach (FileInfo file in sqlKverijaFajlovi)
                             {
-                                writeLines.Append("' ----- " + brojRed.ToString() + " ----- " + Environment.NewLine);
-
                                 foreach (string modulLinija in modulLinii)
                                 {
                                     if (modulLinija.Contains("Public Function " + file.Name.Replace(".", "_")))
@@ -114,14 +112,15 @@ namespace PretvoriKverijaMakroaVoVBA
 
                                         if (!writeLines.ToString().Contains(modulIMetoda))
                                         {
+                                            writeLines.Append("' ----- " + brojRed.ToString() + " ----- " + Environment.NewLine);
                                             writeLines.Append("    Debug.Print " + modulIMetoda + Environment.NewLine);
                                             writeLines.Append("    DoCmd.RunSQL " + modulIMetoda + Environment.NewLine);
                                             writeLines.Append(Environment.NewLine);
+
+                                            brojRed += 1;
                                         }
                                     }
                                 }
-
-                                brojRed += 1;
                             }
 
                             if (!writeLines.ToString().Contains("Call brishiMegjuTabeli()"))
