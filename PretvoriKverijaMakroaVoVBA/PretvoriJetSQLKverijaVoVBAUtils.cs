@@ -81,7 +81,7 @@ namespace PretvoriKverijaMakroaVoVBA
                     string modulSodrzhina = File.ReadAllText(vbaModuliFajlovi[1].FullName);
                     string[] modulLinii = modulSodrzhina.Split('\n');
 
-                    StringBuilder writeLines = new StringBuilder(); 
+                    StringBuilder writeLines = new StringBuilder();
 
                     // TODO da se dovrshi ova, pechati po povekje pati edno isto
                     foreach(string makroLinija in makroLinii)
@@ -94,8 +94,12 @@ namespace PretvoriKverijaMakroaVoVBA
                         }
                         else
                         {
+                            int brojRed = 1;
+
                             foreach (FileInfo file in sqlKverijaFajlovi)
                             {
+                                writeLines.Append("' ----- " + brojRed.ToString() + " ----- " + Environment.NewLine);
+
                                 foreach (string modulLinija in modulLinii)
                                 {
                                     if (modulLinija.Contains("Public Function " + file.Name.Replace(".", "_")))
@@ -116,6 +120,8 @@ namespace PretvoriKverijaMakroaVoVBA
                                         }
                                     }
                                 }
+
+                                brojRed += 1;
                             }
 
                             if (!writeLines.ToString().Contains("Call brishiMegjuTabeli()"))
