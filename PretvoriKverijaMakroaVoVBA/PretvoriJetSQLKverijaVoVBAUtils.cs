@@ -376,7 +376,8 @@ namespace PretvoriKverijaMakroaVoVBA
                         if (!imeIzlezenEkselFajl.EndsWith(".xls"))
                             imeIzlezenEkselFajl += ".xls";
 
-                        ishod.Append(tab + "sql = sql & \"INTO [\" & " + imeRabotenList + " & \"] IN ''[Excel 8.0;Database=" + patekaEksel + imeIzlezenEkselFajl + "] \"\n");
+                        ishod.Append(tab + "sql = sql & " + PatekaEksel(imeRabotenList, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), imeIzlezenEkselFajl) + "\n");
+                        //ishod.Append(tab + "sql = sql & \"INTO [\" & " + imeRabotenList + " & \"] IN ''[Excel 8.0;Database=" + patekaEksel + imeIzlezenEkselFajl + "] \"\n");
                     }
 
                     ishod.Append(tab + "sql = sql & \"" + row.Replace("\r", "") + " \" & vbNewLine\n");
@@ -387,6 +388,18 @@ namespace PretvoriKverijaMakroaVoVBA
             ishod.Append("End Function\n\n");
 
             return ishod.ToString();
+        }
+
+        public static string PatekaEksel(string imeRabotenList, string patekaEksel, string imeIzlezenEkselFajl)
+        {
+            string ExcelJetSQLStringSoPateka;
+
+            if (patekaEksel.EndsWith("\\"))
+                ExcelJetSQLStringSoPateka = "\"INTO [\" & " + imeRabotenList + " & \"] IN ''[Excel 8.0;Database=" + patekaEksel + imeIzlezenEkselFajl + "] \"";
+            else
+                ExcelJetSQLStringSoPateka = "\"INTO [\" & " + imeRabotenList + " & \"] IN ''[Excel 8.0;Database=" + patekaEksel + "\\" + imeIzlezenEkselFajl + "] \"";
+    
+            return ExcelJetSQLStringSoPateka;
         }
     }
 }

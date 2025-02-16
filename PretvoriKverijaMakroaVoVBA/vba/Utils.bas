@@ -1,3 +1,11 @@
+Public Function ExcelJetSQLStringSoPateka(ByVal imeProverka As String, ByVal patekaXLSFajl As String, ByVal imeXLSFajl As String) As String
+    If Right(patekaXLSFajl, 1) = "\" Then
+        ExcelJetSQLStringSoPateka = " INTO [" & imeProverka & "] IN ''[Excel 8.0;Database=" & patekaXLSFajl & imeXLSFajl & "]"
+    Else
+        ExcelJetSQLStringSoPateka = " INTO [" & imeProverka & "] IN ''[Excel 8.0;Database=" & patekaXLSFajl & "\" & imeXLSFajl & "]"
+    End If
+End Function
+
 Public Function ExcelJetSQLString(ByVal imeProverka As String, ByVal imeXLSFajl As String) As String
     ExcelJetSQLString = " INTO [" & imeProverka & "] IN ''[Excel 8.0;Database=" & CurrentProject.Path & "\" & imeXLSFajl & "]"
 End Function
