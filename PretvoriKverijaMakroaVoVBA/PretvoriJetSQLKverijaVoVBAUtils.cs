@@ -237,6 +237,7 @@ namespace PretvoriKverijaMakroaVoVBA
             string[] rows;
             int i = 0;
             int k = 0;
+            StringBuilder redMetoda = new StringBuilder();
 
             if (patekaEksel == null || patekaEksel.Equals(string.Empty))
                 patekaEksel = Environment.CurrentDirectory;
@@ -280,30 +281,35 @@ namespace PretvoriKverijaMakroaVoVBA
             imeRabotenList = methodName.Replace("_sql", "");
 
             if (dodajZaIzvozVoEksel)
-                ishod.Append("Public Function " + methodName + "(ByVal " + imeRabotenList + " As String, ");
+                redMetoda.Append("Public Function " + methodName + "(ByVal " + imeRabotenList + " As String, ");
             else
-                ishod.Append("Public Function " + methodName + "(");
+                redMetoda.Append("Public Function " + methodName + "(");
 
             foreach (string zamena in zamenaIminjaTabeli)
             {
                 if (kveri.Contains(zamena))
                 {
-                    ishod.Append("ByVal " + zamena + " As String ");
-
-                    if (k >= 0 && k < zamenaIminjaTabeli.Count - 1)
+                    if (!redMetoda.ToString().Contains(zamena))
                     {
-                        ishod.Append(", ");
-                    }
+                        redMetoda.Append("ByVal " + zamena + " As String ");
 
-                    k += 1;
+                        if (k >= 0 && k < zamenaIminjaTabeli.Count - 1)
+                        {
+                            redMetoda.Append(", ");
+                        }
+
+                        k += 1;
+                    }
                 }
             }
 
             // otstrani posledna zapirka ako metodot ima samo eden parametar. 
-            if (ishod[ishod.Length - 2].Equals(','))
-                ishod = ishod.Remove(ishod.Length - 3, 2);
+            if (redMetoda[redMetoda.Length - 2].Equals(','))
+                redMetoda = redMetoda.Remove(redMetoda.Length - 3, 2);
 
-            ishod.Append(") As String\n");
+            redMetoda.Append(") As String\n");
+
+            ishod.Append(redMetoda.ToString());
             ishod.Append(tab + "Dim sql as String\n");
 
             rows = kveri.Split('\n');
