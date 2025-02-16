@@ -11,6 +11,8 @@ namespace PretvoriKverijaMakroaVoVBA
     {
         public const char SPEC_KARAKTER_ZA_ZAMENA = '@';
         public const char ODDELUVACH_ZA_IMINJA_NA_TABELI = '|';
+        public const string PRETSTAVKA_IME_TABELA_KONSTANTA = "TBL_";
+        public const string REGEX_TOCHNO_POKLOPUVANJE = @"\b{0}\b";
 
         /// <summary>
         /// Pretvora kverija vo VBA modul zavisno od postoechki papki na makroa. 
@@ -132,6 +134,17 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     File.AppendAllText(di.FullName + "\\" + moduleFileName, writeLines.ToString() + Environment.NewLine);
 
+                    StringBuilder iminjaTabeliKonstanti = new StringBuilder();
+
+                    foreach(string imeTabelaZamena in  zamenaIminjaTabeli)
+                    {
+                        iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
+                    }
+
+                    iminjaTabeliKonstanti.Append(Environment.NewLine);
+
+                    File.AppendAllText(di.FullName + "\\" + moduleFileName, iminjaTabeliKonstanti.ToString());
+
                     StringBuilder dropTablesSB = new StringBuilder();
 
                     dropTablesSB.Append("Public Sub brishiMegjuTabeli()" + Environment.NewLine);
@@ -139,7 +152,7 @@ namespace PretvoriKverijaMakroaVoVBA
                     for(int i = 0; i < zamenaIminjaTabeli.Count; i += 1)
                     {
                         if (daliEMegjuTabelaLista[i] && newFileBuilder.ToString().Contains(zamenaIminjaTabeli[i]))
-                            dropTablesSB.Append("DoCmd.RunSQL \"drop table " + zamenaIminjaTabeli[i] + "\"" + Environment.NewLine);
+                            dropTablesSB.Append("    DoCmd.RunSQL \"drop table " + zamenaIminjaTabeli[i] + "\"" + Environment.NewLine);
                     }
 
                     dropTablesSB.Append("End Sub" + Environment.NewLine);
@@ -218,7 +231,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
         public static string ZameniCelZbor(string input, string find, string replace, bool matchWholeWord)
         {
-            string textToFind = matchWholeWord ? string.Format(@"\b{0}\b", find) : find;
+            string textToFind = matchWholeWord ? string.Format(REGEX_TOCHNO_POKLOPUVANJE, find) : find;
             return Regex.Replace(input, textToFind, replace);
         }
 
