@@ -10,6 +10,7 @@ namespace PretvoriKverijaMakroaVoVBA
     {
         static void Main(string[] args)
         {
+            PretvoriJetSQLKverijaVoVBAUtils.IzveziIminjaTabeliKonstantiVoFajl();
             PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranje();
             PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranjeMakroaIKverija();
         }

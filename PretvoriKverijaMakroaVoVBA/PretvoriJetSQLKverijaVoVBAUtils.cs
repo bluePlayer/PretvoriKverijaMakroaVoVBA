@@ -54,18 +54,6 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     moduleFileName = fileName + "_module.bas";
 
-                    // gi stava konstantite pred da se vmetne kodot na glavnata makro-funkcija
-                    StringBuilder iminjaTabeliKonstanti = new StringBuilder();
-
-                    foreach (string imeTabelaZamena in zamenaIminjaTabeli)
-                    {
-                        iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
-                    }
-
-                    iminjaTabeliKonstanti.Append(Environment.NewLine);
-
-                    File.WriteAllText(di.FullName + "\\" + moduleFileName, iminjaTabeliKonstanti.ToString());
-
                     // gi pretvora kverijata vo funkcii
                     foreach (FileInfo file in sqlKverijaFajlovi)
                     {
@@ -86,7 +74,7 @@ namespace PretvoriKverijaMakroaVoVBA
                         Console.WriteLine("Pretvoriv: " + file.Name + " vo VBA kod! ");
                     }
 
-                    File.AppendAllText(di.FullName + "\\" + moduleFileName, newFileBuilder.ToString());
+                    File.WriteAllText(di.FullName + "\\" + moduleFileName, newFileBuilder.ToString());
 
                     FileInfo[] vbaModuliFajlovi = di.GetFiles("*.bas").OrderBy(fi => fi.Name).ToArray();
 
@@ -132,7 +120,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                                         foreach (string imeTabelaZamena in zamenaIminjaTabeli)
                                         {
-                                            del2 = del2.Replace(imeTabelaZamena, PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper());
+                                            del2 = del2.Replace(imeTabelaZamena, Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper());
                                         }
 
                                         metodPotpis = del1 + del2;
@@ -168,7 +156,7 @@ namespace PretvoriKverijaMakroaVoVBA
                     for(int i = 0; i < zamenaIminjaTabeli.Count; i += 1)
                     {
                         if (daliEMegjuTabelaLista[i] && newFileBuilder.ToString().Contains(zamenaIminjaTabeli[i]))
-                            dropTablesSB.Append("    DoCmd.RunSQL \"drop table \" & " + PRETSTAVKA_IME_TABELA_KONSTANTA + zamenaIminjaTabeli[i].ToUpper() + Environment.NewLine);
+                            dropTablesSB.Append("    DoCmd.RunSQL \"drop table \" & " + Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + PRETSTAVKA_IME_TABELA_KONSTANTA + zamenaIminjaTabeli[i].ToUpper() + Environment.NewLine);
                     }
 
                     dropTablesSB.Append("End Sub" + Environment.NewLine);
@@ -243,6 +231,29 @@ namespace PretvoriKverijaMakroaVoVBA
             {
                 Console.WriteLine("Greshka: " + ex.Message);
             }
+        }
+
+        public static void IzveziIminjaTabeliKonstantiVoFajl()
+        {
+            List<string> zamenaIminjaTabeli = new List<string>();
+
+            foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
+            {
+                string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+                zamenaIminjaTabeli.Add(parTabeli[1]);
+            }
+
+            // gi stava konstantite pred da se vmetne kodot na glavnata makro-funkcija
+            StringBuilder iminjaTabeliKonstanti = new StringBuilder();
+
+            foreach (string imeTabelaZamena in zamenaIminjaTabeli)
+            {
+                iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
+            }
+
+            iminjaTabeliKonstanti.Append(Environment.NewLine);
+
+            File.WriteAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\..\\" + Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI, iminjaTabeliKonstanti.ToString());
         }
 
         public static string ZameniCelZbor(string input, string find, string replace, bool matchWholeWord)

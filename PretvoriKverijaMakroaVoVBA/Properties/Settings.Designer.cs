@@ -151,5 +151,17 @@ namespace PretvoriKverijaMakroaVoVBA.Properties {
                 this["iminijaTabeli"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("VOI60_IminjaTabeli.bas")]
+        public string IME_FAJL_TABELI_KONSTANTI {
+            get {
+                return ((string)(this["IME_FAJL_TABELI_KONSTANTI"]));
+            }
+            set {
+                this["IME_FAJL_TABELI_KONSTANTI"] = value;
+            }
+        }
     }
 }
