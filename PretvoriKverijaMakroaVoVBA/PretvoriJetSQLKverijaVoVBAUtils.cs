@@ -188,6 +188,7 @@ namespace PretvoriKverijaMakroaVoVBA
                 DirectoryInfo sqlKverijaDir = new DirectoryInfo(Properties.Settings.Default.SQL_KVERIJA_PAPKA);
                 FileInfo[] sqlKverijaFajlovi = sqlKverijaDir.GetFiles(Properties.Settings.Default.VID_NA_FAJL);
                 StringBuilder newFileBuilder = new StringBuilder();
+                StringBuilder povikKverijaFunkcijaSB = new StringBuilder();
                 string fileName = Properties.Settings.Default.IME_NA_IZVEZEN_FAJL;
 
                 DirectoryInfo vbaMakroaKverijaDir = new DirectoryInfo(Properties.Settings.Default.VBA_MAKROA_PAPKA);
@@ -202,6 +203,10 @@ namespace PretvoriKverijaMakroaVoVBA
                     iminijaTabeli.Add(parTabeli[0]);
                     zamenaIminjaTabeli.Add(parTabeli[1]);
                 }
+
+                // dodaj i otvori nova procedura koja gi povikuva kverijata vnatre
+                int brojKveri = 1;
+                povikKverijaFunkcijaSB.Append("Public Sub IzvrshiKverija()" + Environment.NewLine);
 
                 foreach (FileInfo file in sqlKverijaFajlovi)
                 {
@@ -219,10 +224,35 @@ namespace PretvoriKverijaMakroaVoVBA
                             Properties.Settings.Default.dodajZaIzvozVoEksel);
 
                     newFileBuilder.Append(sqlString);
+
+                    string kveriMetoda = 
+                        sqlString.Split('\n')[0]
+                            .Replace("Public Function", string.Empty)
+                            .Replace("ByVal", string.Empty)
+                            .Replace("As String", string.Empty);
+
+                    povikKverijaFunkcijaSB.Append("    '-----" + brojKveri.ToString() + "-----" + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    Debug.Print " + kveriMetoda + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    DoCmd.RunSQL " + kveriMetoda + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append(Environment.NewLine);
+
+                    brojKveri += 1;
+
                     Console.WriteLine("Pretvoriv: " + file.Name + " vo VBA kod! ");
                 }
 
+                // zatvori procedura koja gi povikuva kverijata vnatre 
+                povikKverijaFunkcijaSB.Append("End Sub" + Environment.NewLine);
+
+                foreach(string zamenskaTabela in zamenaIminjaTabeli)
+                {
+                    povikKverijaFunkcijaSB = povikKverijaFunkcijaSB.Replace(
+                        zamenskaTabela, 
+                        Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + zamenskaTabela);
+                }
+
                 File.WriteAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\" + fileName, newFileBuilder.ToString());
+                File.AppendAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\" + fileName, povikKverijaFunkcijaSB.ToString());
 
                 Console.WriteLine("Zavrshiv so pretvaranje na kverijata vo VBA kod! ");
                 Console.ReadLine();
