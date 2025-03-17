@@ -59,7 +59,7 @@ iminijaTabeli. Пример:
                         <string>Tgodisnik_4|TabelaGodishnik4|1</string>
                         <string>Tgodisnik_7|TabelaGodishnik7|1</string>
                         <string>Tpol|TabelaPol|1</string>
-                        <string>RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50|0</string>
+                        <string>Tabela_KD_SV50|TabelaVnesSV50|0</string>
                     </ArrayOfString>
                 </value>
             </setting>
