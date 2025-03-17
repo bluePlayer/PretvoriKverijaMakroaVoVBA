@@ -403,7 +403,7 @@ namespace PretvoriKverijaMakroaVoVBA
                 }
                 else
                 {
-                    if (!kveri.ToUpper().Contains("INTO") && row.ToUpper().Contains("FROM"))
+                    if (!kveri.ToUpper().Contains("INTO") && kveri.ToUpper().Contains("SELECT") && kveri.ToUpper().Contains("FROM"))
                     {
                         if (!Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(null) && !Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(string.Empty))
                             patekaEksel = Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Replace("\\\\", "\\");
