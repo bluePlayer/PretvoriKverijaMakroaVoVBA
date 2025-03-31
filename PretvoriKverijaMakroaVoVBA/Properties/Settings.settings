@@ -11,9 +11,6 @@
     <Setting Name="IME_NA_IZVEZEN_EKSEL_FAJL" Type="System.String" Scope="User">
       <Value Profile="(Default)">imeXLSFajl.xls</Value>
     </Setting>
-    <Setting Name="dodajZaIzvozVoEksel" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="PATEKA_IZVEZEN_EKSEL_FAJl" Type="System.String" Scope="User">
       <Value Profile="(Default)">PrimerKverija</Value>
     </Setting>

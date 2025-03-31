@@ -67,8 +67,7 @@ namespace PretvoriKverijaMakroaVoVBA
                                 zamenaIminjaTabeli,
                                 null,
                                 null,
-                                null,
-                                Properties.Settings.Default.dodajZaIzvozVoEksel);
+                                null);
 
                         newFileBuilder.Append(sqlString);
                         Console.WriteLine("Pretvoriv: " + file.Name + " vo VBA kod! ");
@@ -220,8 +219,7 @@ namespace PretvoriKverijaMakroaVoVBA
                             zamenaIminjaTabeli,
                             null,
                             null,
-                            null,
-                            Properties.Settings.Default.dodajZaIzvozVoEksel);
+                            null);
 
                     newFileBuilder.Append(sqlString);
 
@@ -299,8 +297,7 @@ namespace PretvoriKverijaMakroaVoVBA
             List<string> zamenaIminjaTabeli,
             string patekaEksel = null,
             string imeIzlezenEkselFajl = null,
-            string imeRabotenList = null,
-            bool dodajZaIzvozVoEksel = false)
+            string imeRabotenList = null)
         {
             string tab = "  ";
             StringBuilder ishod = new StringBuilder();
@@ -350,8 +347,11 @@ namespace PretvoriKverijaMakroaVoVBA
 
             imeRabotenList = methodName.Replace("_sql", "");
 
-            if (dodajZaIzvozVoEksel)
+            if (!kveri.ToUpper().Contains("INTO") && kveri.ToUpper().Contains("SELECT"))
+            {
                 redMetoda.Append("Public Function " + methodName + "(ByVal " + imeRabotenList + " As String, ");
+                File.AppendAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\..\\" + Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI, "Public Const " + imeRabotenList.ToUpper() + " As String = \"" + imeRabotenList + "\"\n");
+            }
             else
                 redMetoda.Append("Public Function " + methodName + "(");
 
@@ -403,7 +403,7 @@ namespace PretvoriKverijaMakroaVoVBA
                 }
                 else
                 {
-                    if (!kveri.ToUpper().Contains("INTO") && kveri.ToUpper().Contains("SELECT") && kveri.ToUpper().Contains("FROM"))
+                    if (!kveri.ToUpper().Contains("INTO") && kveri.ToUpper().Contains("SELECT") && row.ToUpper().Contains("FROM"))
                     {
                         if (!Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(null) && !Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(string.Empty))
                             patekaEksel = Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Replace("\\\\", "\\");

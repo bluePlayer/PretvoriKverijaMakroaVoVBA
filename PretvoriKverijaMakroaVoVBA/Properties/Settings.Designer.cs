@@ -61,18 +61,6 @@ namespace PretvoriKverijaMakroaVoVBA.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool dodajZaIzvozVoEksel {
-            get {
-                return ((bool)(this["dodajZaIzvozVoEksel"]));
-            }
-            set {
-                this["dodajZaIzvozVoEksel"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("PrimerKverija")]
         public string PATEKA_IZVEZEN_EKSEL_FAJl {
             get {
