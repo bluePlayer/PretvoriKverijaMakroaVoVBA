@@ -21,7 +21,7 @@ namespace PretvoriKverijaMakroaVoVBA
         /// makroto). Ova znachi deka vo papkata so ime na makroto, kje postoi VBA modul vo koj ima
         /// kverija/methodi so iminja na kverijata koi se povikuvaat vo samoto makro. 
         /// No potrebno e da postojat makroata izvezeni od prethodno kako VBA modul od samiot Akces fajl. 
-        /// Taka noviot modul kje se vika ime_na_makro_module.bas, so nastavkata "_module". 
+        /// Taka noviot modul kje se vika ime_na_makro_SQL.bas, so nastavkata "_SQL". 
         /// </summary>
         public static void IzvrshiPretvoranjeMakroaIKverija()
         {
@@ -52,7 +52,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     Console.WriteLine("Rabotam vo papka: " + di.Name);
 
-                    moduleFileName = fileName + "_module.bas";
+                    moduleFileName = fileName + "_SQL.bas";
 
                     // gi pretvora kverijata vo funkcii
                     foreach (FileInfo file in sqlKverijaFajlovi)
@@ -124,7 +124,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                                         metodPotpis = del1 + del2;
 
-                                        string modulIMetoda = fileName + "_module." + metodPotpis;
+                                        string modulIMetoda = fileName + "_SQL." + metodPotpis;
 
                                         if (!writeLines.ToString().Contains(modulIMetoda))
                                         {
@@ -282,6 +282,63 @@ namespace PretvoriKverijaMakroaVoVBA
             iminjaTabeliKonstanti.Append(Environment.NewLine);
 
             File.WriteAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\..\\" + Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI, iminjaTabeliKonstanti.ToString());
+        }
+
+        // TODO da se zamenat zakucanite iminja na tabeli so tie od konfiguracija
+        public static void DodajTestTabeli()
+        {
+            string fileName = Properties.Settings.Default.IME_NA_IZVEZEN_FAJL;
+            StringBuilder ishod = new StringBuilder();
+
+            ishod.Append(Environment.NewLine);
+            
+            ishod.Append("Public Sub DodajTestTabeli()" + Environment.NewLine);
+            ishod.Append("    Dim sql as String" + Environment.NewLine);
+            ishod.Append("    DoCmd.SetWarnings False" + Environment.NewLine);
+            ishod.Append(Environment.NewLine);
+
+            foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
+            {
+                string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+
+                if (parTabeli[2] == "0")
+                {
+                    ishod.Append("    sql = \"select " + parTabeli[1] + ".* into " + parTabeli[1] + "_TEST from " + parTabeli[1] + "\" " + Environment.NewLine);
+                    ishod.Append("    Debug.Print sql" + Environment.NewLine);
+                    ishod.Append("    DoCmd.RunSQL (sql) " + Environment.NewLine);
+                    ishod.Append(Environment.NewLine);
+                }
+            }
+
+            ishod.Append("    DoCmd.SetWarnings True" + Environment.NewLine);
+            ishod.Append("End Sub" + Environment.NewLine);
+
+            ishod.Append(Environment.NewLine);
+            ishod.Append("Public Sub brishiMegjuTabeli()" + Environment.NewLine);
+            ishod.Append("    Dim sql as String" + Environment.NewLine);
+            ishod.Append("    DoCmd.SetWarnings False" + Environment.NewLine);
+            ishod.Append(Environment.NewLine);
+
+            foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
+            {
+                string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+
+                if (parTabeli[2] == "0")
+                {
+                    ishod.Append("    sql = \"drop table " + parTabeli[1] + "_TEST\"" + Environment.NewLine);
+                    ishod.Append("    Debug.Print sql" + Environment.NewLine);
+                    ishod.Append("    DoCmd.RunSQL sql" + Environment.NewLine);
+                    ishod.Append(Environment.NewLine);
+                }
+            }
+
+            ishod.Append("    DoCmd.SetWarnings True" + Environment.NewLine);
+            ishod.Append("End Sub" + Environment.NewLine);
+            
+            File.AppendAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\" + fileName, ishod.ToString());
+
+            Console.WriteLine("Zavrshiv so VBA kod za test tabeli! ");
+            Console.ReadLine();
         }
 
         public static string ZameniCelZbor(string input, string find, string replace, bool matchWholeWord)

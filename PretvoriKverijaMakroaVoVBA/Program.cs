@@ -13,6 +13,7 @@ namespace PretvoriKverijaMakroaVoVBA
             PretvoriJetSQLKverijaVoVBAUtils.IzveziIminjaTabeliKonstantiVoFajl();
             PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranje();
             PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranjeMakroaIKverija();
+            PretvoriJetSQLKverijaVoVBAUtils.DodajTestTabeli();
         }
     }
 }
