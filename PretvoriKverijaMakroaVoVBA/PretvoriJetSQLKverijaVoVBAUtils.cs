@@ -268,7 +268,16 @@ namespace PretvoriKverijaMakroaVoVBA
             foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
             {
                 string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
-                zamenaIminjaTabeli.Add(parTabeli[1]);
+
+                if (!zamenaIminjaTabeli.Contains(parTabeli[1]))
+                {
+                    zamenaIminjaTabeli.Add(parTabeli[1]);
+
+                    if (parTabeli[2].Equals("0"))
+                    {
+                        zamenaIminjaTabeli.Add(parTabeli[1] + "_TEST");
+                    }
+                }
             }
 
             // gi stava konstantite pred da se vmetne kodot na glavnata makro-funkcija
@@ -287,6 +296,9 @@ namespace PretvoriKverijaMakroaVoVBA
         // TODO da se zamenat zakucanite iminja na tabeli so tie od konfiguracija
         public static void DodajTestTabeli()
         {
+            List<string> pomIminjaTabeli = new List<string>();
+            string imeTabela = string.Empty;
+            string imeTestTabela = string.Empty;
             string fileName = Properties.Settings.Default.IME_NA_IZVEZEN_FAJL;
             StringBuilder ishod = new StringBuilder();
 
@@ -301,17 +313,27 @@ namespace PretvoriKverijaMakroaVoVBA
             {
                 string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
 
-                if (parTabeli[2] == "0")
+                if (!pomIminjaTabeli.Contains(parTabeli[1]))
                 {
-                    ishod.Append("    sql = \"select " + parTabeli[1] + ".* into " + parTabeli[1] + "_TEST from " + parTabeli[1] + "\" " + Environment.NewLine);
-                    ishod.Append("    Debug.Print sql" + Environment.NewLine);
-                    ishod.Append("    DoCmd.RunSQL (sql) " + Environment.NewLine);
-                    ishod.Append(Environment.NewLine);
+                    pomIminjaTabeli.Add(parTabeli[1]);
+
+                    if (parTabeli[2] == "0")
+                    {
+                        imeTabela = Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Split('.')[0] + "." + PRETSTAVKA_IME_TABELA_KONSTANTA + parTabeli[1].ToUpper();
+                        imeTestTabela = imeTabela + "_TEST";
+                        ishod.Append("    sql = \"select \" & " + imeTabela + " & \".* into \" & " + imeTestTabela + " & \" from \" & " + imeTabela + " " + Environment.NewLine);
+                        ishod.Append("    Debug.Print sql" + Environment.NewLine);
+                        ishod.Append("    DoCmd.RunSQL (sql) " + Environment.NewLine);
+                        ishod.Append(Environment.NewLine);
+                    }
                 }
             }
 
             ishod.Append("    DoCmd.SetWarnings True" + Environment.NewLine);
             ishod.Append("End Sub" + Environment.NewLine);
+
+            // ----- dodaj kod za brishenje test tabeli -----
+            pomIminjaTabeli = new List<string>();
 
             ishod.Append(Environment.NewLine);
             ishod.Append("Public Sub brishiMegjuTabeli()" + Environment.NewLine);
@@ -323,12 +345,22 @@ namespace PretvoriKverijaMakroaVoVBA
             {
                 string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
 
-                if (parTabeli[2] == "0")
+                if (!pomIminjaTabeli.Contains(parTabeli[1]))
                 {
-                    ishod.Append("    sql = \"drop table " + parTabeli[1] + "_TEST\"" + Environment.NewLine);
-                    ishod.Append("    Debug.Print sql" + Environment.NewLine);
-                    ishod.Append("    DoCmd.RunSQL sql" + Environment.NewLine);
-                    ishod.Append(Environment.NewLine);
+                    pomIminjaTabeli.Add(parTabeli[1]);
+
+                    if (parTabeli[2] == "0")
+                    {
+                        imeTabela = Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Split('.')[0] + "." + PRETSTAVKA_IME_TABELA_KONSTANTA + parTabeli[1].ToUpper();
+                        imeTestTabela = imeTabela + "_TEST";
+                        ishod.Append("    If Utils.daliTabelataPostoi(" + imeTestTabela + ", CurrentDb) Then " + Environment.NewLine);
+                        ishod.Append("        sql = \"drop table \" & " + imeTestTabela + " " + Environment.NewLine);
+                        ishod.Append("        Debug.Print sql" + Environment.NewLine);
+                        ishod.Append("        DoCmd.RunSQL sql" + Environment.NewLine);
+                        ishod.Append("    End If");
+                        ishod.Append(Environment.NewLine);
+                        ishod.Append(Environment.NewLine);
+                    }
                 }
             }
 

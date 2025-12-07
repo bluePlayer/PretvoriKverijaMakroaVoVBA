@@ -216,7 +216,62 @@ End Sub
 
 ```
 каде се вметнаа главната функција на макрото, со повикување на кверијата, како и методата за бришење на меѓу-табелите, каде во случајов само TabelaNasMesta е излистана бидејќи е меѓу-табела, додека TabelaVnes е серверска табела.
-# Чекор 4 - Исправки на створените фајлови и нивна употреба 
+Инаку во папката каде се извезоа кверијата, ќе се створи фајл imeXLSFajl.bas каде ќе се повикаат сите кверија од проектот во процедурата IzvrshiKverija().
+Така на дното од овој фајл ќе се додадат функциите:
+
+```
+Public Sub DodajTestTabeli()
+    Dim sql as String
+    DoCmd.SetWarnings False
+
+    sql = "select " & VOI50_IminjaTabeli.TBL_TABELAVNES & ".* into " & VOI50_IminjaTabeli.TBL_TABELAVNES_TEST & " from " & VOI50_IminjaTabeli.TBL_TABELAVNES 
+    Debug.Print sql
+    DoCmd.RunSQL (sql) 
+
+    sql = "select " & VOI50_IminjaTabeli.TBL_TABELANASMESTA & ".* into " & VOI50_IminjaTabeli.TBL_TABELANASMESTA_TEST & " from " & VOI50_IminjaTabeli.TBL_TABELANASMESTA 
+    Debug.Print sql
+    DoCmd.RunSQL (sql) 
+
+    DoCmd.SetWarnings True
+End Sub
+
+Public Sub brishiMegjuTabeli()
+    Dim sql as String
+    DoCmd.SetWarnings False
+
+    If Utils.daliTabelataPostoi(VOI50_IminjaTabeli.TBL_TABELAVNES_TEST, CurrentDb) Then 
+        sql = "drop table " & VOI50_IminjaTabeli.TBL_TABELAVNES_TEST 
+        Debug.Print sql
+        DoCmd.RunSQL sql
+    End If
+
+    If Utils.daliTabelataPostoi(VOI50_IminjaTabeli.TBL_TABELANASMESTA_TEST, CurrentDb) Then 
+        sql = "drop table " & VOI50_IminjaTabeli.TBL_TABELANASMESTA_TEST 
+        Debug.Print sql
+        DoCmd.RunSQL sql
+    End If
+
+    DoCmd.SetWarnings True
+End Sub
+```
+
+кои ќе ги повикаме на копче во главната форма:
+
+```
+Private Sub brishiMegjuTabeliBtn_Click()
+    Call VOI50_Proba.brishiMegjuTabeli
+End Sub
+
+Private Sub dodajTestTabeliBtn_Click()
+    Call VOI50_Proba.DodajTestTabeli
+End Sub
+```
+Инаку првата функција ќе створи тест табели од серверските, и истите ќе имаат и дизајн како на серверските табели. Ова е погодно да тестираме нови кверија на тест табели наместо на серверси. 
+Исто така подоле има функција за бришење на додадените тест табели која ќе ја повикаме на копче. 
+Вака имаме листинг на тоа кои табели во иднина нема да ни требаат во Акцес, и истите може да ги избришеме на копче. Погодно за архивирање на Акцес апликација. 
+Тест табелите може да зафаќаат простор. 
+
+# Чекор 5 - Исправки на створените фајлови и нивна употреба 
 - Бидејќи претворачот може неколку пати да најде имиња на табели кои се содржат во други имиња на табели, ова значи дека во потписот на ВБА методите ќе се додадат дупликат параметри кои треба да се избришат пешки бидејќи засега, овој проблем не е решен. Функција во ВБА не може да има два параметри со исто име. 
 - Се случува дадено квери да е доста долго, па иако има код за да ја расцепи линијата на две или повеќе пократки линии, сепак може да прекорачи одреден број на букви во линија. Притоа, оваа линија мора да се најде и расцепи рачно, за да го искомпајлира Акцес фајлот новиот код. Треба ескуел кодот кој се добива како исход од функцијат да биде важечки ескуел код за да може да го изврши DoCmd.RunSQL наредбата. 
 - Новиот ВБА модул се додава во Акцес со наредбата Database tools -> Visual Basic Editor -> Modules -> Import file -> ime_na_vba_modul_SQL.bas. Притоа мора задожително да се искомпајлира овој нов фајл со наредбата Debug -> Compile. Доколку не се искомпајлира, и се појави порака за грешка, мора да се поправат сите грешки се додека не се искомпајлира новиот фајл. Повеќе макроа значат повеќе ВБА модули. Истите треба да се додадат во Акцес фајлот, поправат грешките во нив и да се искомпајлира Акцес фајлот со овие нови фајлови. Во примерот погоре, на клик-евент на копче би се повикала функцијата Macro5(). Притоа ако сме сигурни дека се е во ред, ќе ја одкоментираме линијата со „Call brishiMegjuTabeli“ и ќе искомпајлираме повторно. Така секој пат, ВБА модулот ќе ги брише меѓу-табелите откако ќе се добие тоа што сакаме, се разбира доколку не се брише табелата во која се наоѓа крајниот исход на макрото, пример излезна табела за објавување. 

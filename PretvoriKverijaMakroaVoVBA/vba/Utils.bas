@@ -145,6 +145,25 @@ Public Function DaliPostoiModulot(ByVal moduleName As String) As Boolean
     DaliPostoiModulot = postoi
 End Function
 
+Public Function daliTabelataPostoi(ByVal imeNaTabela As String, ByRef db As DAO.Database) As Boolean
+    Dim msg As String
+    Dim postoi As Boolean
+    
+    postoi = False
+
+    For Each tbl In db.TableDefs
+        If tbl.Name = imeNaTabela Then
+            postoi = True
+            GoTo zavrshiv
+        End If
+    
+    Next tbl
+    
+zavrshiv:
+    daliTabelataPostoi = postoi
+    
+End Function
+
 Public Sub PretvoriMakroaVoModuliISnimiNaDisk(ByVal pateka As String, Optional ByVal stvoriPapkiZaMakroa As Boolean = False)
     Dim obj As AccessObject
     Dim moduleName As String
