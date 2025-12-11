@@ -54,6 +54,8 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     moduleFileName = fileName + "_SQL.bas";
 
+                    newFileBuilder.Append("Option Compare Database" + Environment.NewLine + Environment.NewLine);
+
                     // gi pretvora kverijata vo funkcii
                     foreach (FileInfo file in sqlKverijaFajlovi)
                     {
@@ -85,20 +87,24 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     // ostanati linii na makroto
                     StringBuilder writeLines = new StringBuilder();
-
+                    
                     // TODO da se dovrshi ova, pechati po povekje pati edno isto
-                    foreach(string makroLinija in makroLinii)
+                    foreach (string makroLinija in makroLinii)
                     {
-                        //Console.WriteLine(l);
+                        if (makroLinija.Contains("SetWarnings"))
+                        {
+                            writeLines.Append("    Dim sql as String" + Environment.NewLine);
+                        }
 
                         if (!makroLinija.Contains("OpenQuery"))
                         {
-                            writeLines.Append(makroLinija + Environment.NewLine);
+                            if(!makroLinija.Contains("Option Compare Database"))
+                                writeLines.Append(makroLinija + Environment.NewLine);
                         }
                         else
                         {
                             int brojRed = 1;
-
+                            
                             foreach (FileInfo file in sqlKverijaFajlovi)
                             {
                                 foreach (string modulLinija in modulLinii)
@@ -110,7 +116,7 @@ namespace PretvoriKverijaMakroaVoVBA
                                                 .Replace("Public Function ", "")
                                                 .Replace("ByVal", "")
                                                 .Replace("As String", "");
-
+                                        
                                         // gi zamenuva parametrite vo povikot na funkciite so iminjata na konstantite
                                         int pochetok = metodPotpis.IndexOf('(');
                                         int kraj = metodPotpis.IndexOf(')');
@@ -123,14 +129,15 @@ namespace PretvoriKverijaMakroaVoVBA
                                         }
 
                                         metodPotpis = del1 + del2;
-
+                                        
                                         string modulIMetoda = fileName + "_SQL." + metodPotpis;
 
                                         if (!writeLines.ToString().Contains(modulIMetoda))
                                         {
                                             writeLines.Append("' ----- " + brojRed.ToString() + " ----- " + Environment.NewLine);
-                                            writeLines.Append("    Debug.Print " + modulIMetoda + Environment.NewLine);
-                                            writeLines.Append("    DoCmd.RunSQL " + modulIMetoda + Environment.NewLine);
+                                            writeLines.Append("    sql = " + modulIMetoda + Environment.NewLine);
+                                            writeLines.Append("    Debug.Print sql" + Environment.NewLine);
+                                            writeLines.Append("    DoCmd.RunSQL sql" + Environment.NewLine);
                                             writeLines.Append(Environment.NewLine);
 
                                             brojRed += 1;
@@ -206,6 +213,8 @@ namespace PretvoriKverijaMakroaVoVBA
                 // dodaj i otvori nova procedura koja gi povikuva kverijata vnatre
                 int brojKveri = 1;
                 povikKverijaFunkcijaSB.Append("Public Sub IzvrshiKverija()" + Environment.NewLine);
+                povikKverijaFunkcijaSB.Append("    Dim sql as String" + Environment.NewLine);
+                povikKverijaFunkcijaSB.Append("    DoCmd.SetWarnings False" + Environment.NewLine);
 
                 foreach (FileInfo file in sqlKverijaFajlovi)
                 {
@@ -230,8 +239,9 @@ namespace PretvoriKverijaMakroaVoVBA
                             .Replace("As String", string.Empty);
 
                     povikKverijaFunkcijaSB.Append("    '-----" + brojKveri.ToString() + "-----" + Environment.NewLine);
-                    povikKverijaFunkcijaSB.Append("    Debug.Print " + kveriMetoda + Environment.NewLine);
-                    povikKverijaFunkcijaSB.Append("    DoCmd.RunSQL " + kveriMetoda + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    sql = " + kveriMetoda + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    Debug.Print sql" + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    DoCmd.RunSQL (sql)" + Environment.NewLine);
                     povikKverijaFunkcijaSB.Append(Environment.NewLine);
 
                     brojKveri += 1;
@@ -240,6 +250,7 @@ namespace PretvoriKverijaMakroaVoVBA
                 }
 
                 // zatvori procedura koja gi povikuva kverijata vnatre 
+                povikKverijaFunkcijaSB.Append("    DoCmd.SetWarnings True" + Environment.NewLine);
                 povikKverijaFunkcijaSB.Append("End Sub" + Environment.NewLine);
 
                 foreach(string zamenskaTabela in zamenaIminjaTabeli)
