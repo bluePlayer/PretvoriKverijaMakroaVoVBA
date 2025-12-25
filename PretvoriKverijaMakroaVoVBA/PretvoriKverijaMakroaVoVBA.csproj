@@ -152,36 +152,6 @@
     <Content Include="MakroaKverijaPrimeri\godisnikM_7\godisnikTQ_7_9.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikM_8.bas">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_1.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_2.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_3.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_4.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_5.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_6.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_7.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_8.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_8\godisnikTQ_8_9.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="PrimerKverija\Q_M10_1.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

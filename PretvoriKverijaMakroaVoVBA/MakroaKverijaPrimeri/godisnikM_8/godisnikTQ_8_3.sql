@@ -1,6 +1,0 @@
-INSERT INTO Tgodisnik_8 ( GOD, sort, NAZIV, POL, pol_naziv, kol1, KOL2, KOL3, KOL4, KOL5, KOL6, KOL7, KOL8, KOL9, KOL10, KOL11, KOL12, KOL13, KOL14, KOL15 )
-SELECT TabelaVnes.GOD, "0" & [GODISNIK] AS sort, TabelaAdresar.GODISNIK_NAZIV AS NAZIV, "" AS POL, "SE" AS pol_naziv, Count(TabelaVnes.POL) AS kol1, Sum(IIf(([GOD]-[GODRAG])<=20 And [godrag]<>"9999" And [godrag]<>"0000",1,0)) AS KOL2, Sum(IIf(([GOD]-[GODRAG])=21,1,0)) AS KOL3, Sum(IIf(([GOD]-[GODRAG])=22,1,0)) AS KOL4, Sum(IIf(([GOD]-[GODRAG])=23,1,0)) AS KOL5, Sum(IIf(([GOD]-[GODRAG])=24,1,0)) AS KOL6, Sum(IIf(([GOD]-[GODRAG])=25,1,0)) AS KOL7, Sum(IIf(([GOD]-[GODRAG])=26,1,0)) AS KOL8, Sum(IIf(([GOD]-[GODRAG])=27,1,0)) AS KOL9, Sum(IIf(([GOD]-[GODRAG])=28,1,0)) AS KOL10, Sum(IIf(([GOD]-[GODRAG])=29,1,0)) AS KOL11, Sum(IIf(([GOD]-[GODRAG])>=30 And ([GOD]-[GODRAG])<=34,1,0)) AS KOL12, Sum(IIf(([GOD]-[GODRAG])>=35 And ([GOD]-[GODRAG])<=39,1,0)) AS KOL13, Sum(IIf(([GOD]-[GODRAG])>=40 And [godrag]<>"0000" And [godrag]<>"9999",1,0)) AS KOL14, Sum(IIf([GODRAG]="9999" Or [GODRAG]="0000",1,0)) AS KOL15
-FROM TabelaVnes INNER JOIN TabelaAdresar ON (TabelaVnes.EVS = TabelaAdresar.EDINICASOS) AND (TabelaVnes.MATBR = TabelaAdresar.MATBR) AND (TabelaVnes.OTSEK = TabelaAdresar.SIFRAOTSEK)
-WHERE (((TabelaVnes.NACIN)="2"))
-GROUP BY TabelaVnes.GOD, "0" & [GODISNIK], TabelaAdresar.GODISNIK_NAZIV, "", "SE";
-
