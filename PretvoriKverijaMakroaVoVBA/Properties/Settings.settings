@@ -44,7 +44,6 @@
   &lt;string&gt;Tgodisnik_4|TabelaGodishnik4|1&lt;/string&gt;
   &lt;string&gt;Tgodisnik_7|TabelaGodishnik7|1&lt;/string&gt;
   &lt;string&gt;Tpol|TabelaPol|1&lt;/string&gt;
-  &lt;string&gt;RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50|0&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="IME_FAJL_TABELI_KONSTANTI" Type="System.String" Scope="User">

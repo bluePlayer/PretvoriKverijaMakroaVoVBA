@@ -129,7 +129,6 @@ namespace PretvoriKverijaMakroaVoVBA.Properties {
   <string>Tgodisnik_4|TabelaGodishnik4|1</string>
   <string>Tgodisnik_7|TabelaGodishnik7|1</string>
   <string>Tpol|TabelaPol|1</string>
-  <string>RZSVNESI_T_KD_SV50A_2009|TabelaVnesSV50|0</string>
 </ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection iminijaTabeli {
             get {
