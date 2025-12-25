@@ -74,24 +74,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_10\godisnikM_10.bas">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_10\godisnikTQ_10_1.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_10\godisnikTQ_10_2.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_10\godisnikTQ_10_3.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_10\godisnikTQ_10_4.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MakroaKverijaPrimeri\godisnikM_10\godisnikTQ_10_5.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="MakroaKverijaPrimeri\godisnikM_1\godisnikM_1.bas">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
