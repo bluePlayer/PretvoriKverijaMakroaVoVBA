@@ -57,6 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppState.cs" />
+    <Compile Include="ImaTabelaZamena.cs" />
+    <Compile Include="Konstanti.cs" />
     <Compile Include="PretvoriJetSQLKverijaVoVBAUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +68,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="VbaKveri.cs" />
+    <Compile Include="VbaMakro.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
