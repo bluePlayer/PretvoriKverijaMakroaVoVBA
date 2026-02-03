@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppState.cs" />
-    <Compile Include="ImaTabelaZamena.cs" />
+    <Compile Include="ImeTabelaZamena.cs" />
     <Compile Include="Konstanti.cs" />
     <Compile Include="PretvoriJetSQLKverijaVoVBAUtils.cs" />
     <Compile Include="Program.cs" />

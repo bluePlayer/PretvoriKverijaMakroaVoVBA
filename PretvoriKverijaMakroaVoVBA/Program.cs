@@ -13,7 +13,7 @@ namespace PretvoriKverijaMakroaVoVBA
         static void Main(string[] args)
         {
             appState = new AppState();
-
+            Console.WriteLine(appState);
 
             PretvoriJetSQLKverijaVoVBAUtils.IzveziIminjaTabeliKonstantiVoFajl();
             PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranje();

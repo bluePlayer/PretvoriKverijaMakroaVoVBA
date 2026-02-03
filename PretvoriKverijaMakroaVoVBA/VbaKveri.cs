@@ -9,16 +9,32 @@ namespace PretvoriKverijaMakroaVoVBA
     public class VbaKveri
     {
         public AppState appState { get; set; }
+
         public string ime { get; set; }
         public int vid { get; set; }
         public string kveri { get; set; }
 
         public List<string> tabeli { get; set; }
 
-        // TODO
+        public VbaKveri(AppState appState)
+        {
+            this.appState = appState;
+
+            tabeli = new List<string>();
+        }
+
         public override string ToString()
         {
-            return base.ToString();
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("ime: " + ime + Environment.NewLine);
+            sb.Append("vid: " + vid.ToString() + Environment.NewLine);
+            sb.Append("kveri: " + kveri + Environment.NewLine);
+
+            foreach (string tbl in tabeli)
+                sb.Append(tbl + Environment.NewLine);
+
+            return sb.ToString();
         }
     }
 }
