@@ -9,11 +9,6 @@ namespace PretvoriKverijaMakroaVoVBA
 {
     public class PretvoriJetSQLKverijaVoVBAUtils
     {
-        public const char SPEC_KARAKTER_ZA_ZAMENA = '@';
-        public const char ODDELUVACH_ZA_IMINJA_NA_TABELI = '|';
-        public const string PRETSTAVKA_IME_TABELA_KONSTANTA = "TBL_";
-        public const string REGEX_TOCHNO_POKLOPUVANJE = @"\b{0}\b";
-
         /// <summary>
         /// Pretvora kverija vo VBA modul zavisno od postoechki papki na makroa. 
         /// Ako dadeno kveri ima ime koe se sodrzhi vo lista na kverija koi se povikuvaat
@@ -44,7 +39,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
                     {
-                        string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+                        string[] parTabeli = tbl.Split(Konstanti.ODDELUVACH_ZA_IMINJA_NA_TABELI);
                         iminijaTabeli.Add(parTabeli[0]);
                         zamenaIminjaTabeli.Add(parTabeli[1]);
                         daliEMegjuTabelaLista.Add(parTabeli[2] == "1");
@@ -125,7 +120,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                                         foreach (string imeTabelaZamena in zamenaIminjaTabeli)
                                         {
-                                            del2 = del2.Replace(imeTabelaZamena, Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper());
+                                            del2 = del2.Replace(imeTabelaZamena, Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper());
                                         }
 
                                         metodPotpis = del1 + del2;
@@ -162,7 +157,7 @@ namespace PretvoriKverijaMakroaVoVBA
                     for(int i = 0; i < zamenaIminjaTabeli.Count; i += 1)
                     {
                         if (daliEMegjuTabelaLista[i] && newFileBuilder.ToString().Contains(zamenaIminjaTabeli[i]))
-                            dropTablesSB.Append("    DoCmd.RunSQL \"drop table \" & " + Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + PRETSTAVKA_IME_TABELA_KONSTANTA + zamenaIminjaTabeli[i].ToUpper() + Environment.NewLine);
+                            dropTablesSB.Append("    DoCmd.RunSQL \"drop table \" & " + Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + zamenaIminjaTabeli[i].ToUpper() + Environment.NewLine);
                     }
 
                     dropTablesSB.Append("End Sub" + Environment.NewLine);
@@ -205,7 +200,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                 foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
                 {
-                    string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+                    string[] parTabeli = tbl.Split(Konstanti.ODDELUVACH_ZA_IMINJA_NA_TABELI);
                     iminijaTabeli.Add(parTabeli[0]);
                     zamenaIminjaTabeli.Add(parTabeli[1]);
                 }
@@ -278,7 +273,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
             foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
             {
-                string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+                string[] parTabeli = tbl.Split(Konstanti.ODDELUVACH_ZA_IMINJA_NA_TABELI);
 
                 if (!zamenaIminjaTabeli.Contains(parTabeli[1]))
                 {
@@ -296,7 +291,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
             foreach (string imeTabelaZamena in zamenaIminjaTabeli)
             {
-                iminjaTabeliKonstanti.Append("Public Const " + PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
+                iminjaTabeliKonstanti.Append("Public Const " + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
             }
 
             iminjaTabeliKonstanti.Append(Environment.NewLine);
@@ -322,7 +317,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
             foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
             {
-                string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+                string[] parTabeli = tbl.Split(Konstanti.ODDELUVACH_ZA_IMINJA_NA_TABELI);
 
                 if (!pomIminjaTabeli.Contains(parTabeli[1]))
                 {
@@ -330,7 +325,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     if (parTabeli[2] == "0")
                     {
-                        imeTabela = Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Split('.')[0] + "." + PRETSTAVKA_IME_TABELA_KONSTANTA + parTabeli[1].ToUpper();
+                        imeTabela = Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Split('.')[0] + "." + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + parTabeli[1].ToUpper();
                         imeTestTabela = imeTabela + "_TEST";
                         ishod.Append("    sql = \"select \" & " + imeTabela + " & \".* into \" & " + imeTestTabela + " & \" from \" & " + imeTabela + " " + Environment.NewLine);
                         ishod.Append("    Debug.Print sql" + Environment.NewLine);
@@ -354,7 +349,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
             foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
             {
-                string[] parTabeli = tbl.Split(PretvoriJetSQLKverijaVoVBAUtils.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+                string[] parTabeli = tbl.Split(Konstanti.ODDELUVACH_ZA_IMINJA_NA_TABELI);
 
                 if (!pomIminjaTabeli.Contains(parTabeli[1]))
                 {
@@ -362,7 +357,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
                     if (parTabeli[2] == "0")
                     {
-                        imeTabela = Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Split('.')[0] + "." + PRETSTAVKA_IME_TABELA_KONSTANTA + parTabeli[1].ToUpper();
+                        imeTabela = Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Split('.')[0] + "." + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + parTabeli[1].ToUpper();
                         imeTestTabela = imeTabela + "_TEST";
                         ishod.Append("    If Utils.daliTabelataPostoi(" + imeTestTabela + ", CurrentDb) Then " + Environment.NewLine);
                         ishod.Append("        sql = \"drop table \" & " + imeTestTabela + " " + Environment.NewLine);
@@ -386,7 +381,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
         public static string ZameniCelZbor(string input, string find, string replace, bool matchWholeWord)
         {
-            string textToFind = matchWholeWord ? string.Format(REGEX_TOCHNO_POKLOPUVANJE, find) : find;
+            string textToFind = matchWholeWord ? string.Format(Konstanti.REGEX_TOCHNO_POKLOPUVANJE, find) : find;
             return Regex.Replace(input, textToFind, replace);
         }
 
@@ -487,7 +482,7 @@ namespace PretvoriKverijaMakroaVoVBA
             {
                 if (row.StartsWith("SELECT"))
                 {
-                    string[] sqlKoloni = row.Replace(", ", SPEC_KARAKTER_ZA_ZAMENA.ToString()).Split(SPEC_KARAKTER_ZA_ZAMENA);
+                    string[] sqlKoloni = row.Replace(", ", Konstanti.SPEC_KARAKTER_ZA_ZAMENA.ToString()).Split(Konstanti.SPEC_KARAKTER_ZA_ZAMENA);
 
                     if (sqlKoloni.Length == 1)
                         ishod.Append(tab + "sql = sql & \"" + sqlKoloni[0].Replace("\r", "") + " \" & vbNewLine\n");

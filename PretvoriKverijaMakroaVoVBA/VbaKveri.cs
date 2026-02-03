@@ -14,5 +14,11 @@ namespace PretvoriKverijaMakroaVoVBA
         public string kveri { get; set; }
 
         public List<string> tabeli { get; set; }
+
+        // TODO
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }

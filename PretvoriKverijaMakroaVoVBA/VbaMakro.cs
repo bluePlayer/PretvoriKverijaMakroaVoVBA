@@ -13,5 +13,11 @@ namespace PretvoriKverijaMakroaVoVBA
         public string patekaFajl { get; set; }
 
         public List<VbaKveri> kverija { get; set; }
+
+        // TODO
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }

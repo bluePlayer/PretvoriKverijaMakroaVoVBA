@@ -10,6 +10,12 @@ namespace PretvoriKverijaMakroaVoVBA
     {
         public string imeTabela { get; set; }
         public string imeTabelaZamena { get; set; }
-        public bool neEServerskaTabela { get; set; }
+        public bool daliEMegjuTabela { get; set; }
+
+        // TODO
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }
