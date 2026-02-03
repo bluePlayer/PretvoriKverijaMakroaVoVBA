@@ -42,17 +42,49 @@ namespace PretvoriKverijaMakroaVoVBA
 
         public void VchitajIminjaTabeliZameni()
         {
+            List<string> tabeli = new List<string>();
+
             foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
             {
                 string[] parTabeli = tbl.Split(Konstanti.ODDELUVACH_ZA_IMINJA_NA_TABELI);
 
-                ImeTabelaZamena imaTabelaZamena = new ImeTabelaZamena();
-                imaTabelaZamena.ime = parTabeli[0];
-                imaTabelaZamena.imeZamena = parTabeli[1];
-                imaTabelaZamena.daliEMegjuTabela = parTabeli[2] == "1";
+                if (!tabeli.Contains(parTabeli[1]))
+                {
+                    ImeTabelaZamena imaTabelaZamena = new ImeTabelaZamena();
+                    imaTabelaZamena.ime = parTabeli[0];
+                    imaTabelaZamena.imeZamena = parTabeli[1];
+                    imaTabelaZamena.daliEMegjuTabela = parTabeli[2] == "1";
 
-                iminjaTabeliZameni.Add(imaTabelaZamena);
+                    iminjaTabeliZameni.Add(imaTabelaZamena);
+                    tabeli.Add(parTabeli[1]);
+                }
             }
+        }
+
+        public void IzveziIminjaTabeliKonstantiVoFajl()
+        {
+            List<string> zamenaIminjaTabeli = new List<string>();
+
+            foreach (ImeTabelaZamena tbl in iminjaTabeliZameni)
+                zamenaIminjaTabeli.Add(tbl.imeZamena);
+
+            foreach (ImeTabelaZamena tbl in iminjaTabeliZameni)
+                if (!tbl.daliEMegjuTabela)
+                {
+                    zamenaIminjaTabeli.Add(tbl.imeZamena + "_TEST");
+                }
+
+            // gi stava konstantite pred da se vmetne kodot na glavnata makro-funkcija
+            StringBuilder iminjaTabeliKonstanti = new StringBuilder();
+
+            foreach (string imeTabelaZamena in zamenaIminjaTabeli)
+            {
+                iminjaTabeliKonstanti.Append("Public Const " + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + imeTabelaZamena.ToUpper() + " As String = \"" + imeTabelaZamena + "\"" + Environment.NewLine);
+            }
+
+            iminjaTabeliKonstanti.Append(Environment.NewLine);
+
+            File.WriteAllText(sqlKverijaPapka + "\\..\\" + imeFajlTabeliKonstanti, iminjaTabeliKonstanti.ToString());
         }
 
         public override string ToString()

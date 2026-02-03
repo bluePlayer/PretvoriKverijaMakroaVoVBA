@@ -15,7 +15,9 @@ namespace PretvoriKverijaMakroaVoVBA
             appState = new AppState();
             Console.WriteLine(appState);
 
-            PretvoriJetSQLKverijaVoVBAUtils.IzveziIminjaTabeliKonstantiVoFajl();
+            appState.IzveziIminjaTabeliKonstantiVoFajl();
+            //PretvoriJetSQLKverijaVoVBAUtils.IzveziIminjaTabeliKonstantiVoFajl();
+
             PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranje();
             PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranjeMakroaIKverija();
             PretvoriJetSQLKverijaVoVBAUtils.DodajTestTabeli();
