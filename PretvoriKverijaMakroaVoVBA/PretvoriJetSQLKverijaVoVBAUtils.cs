@@ -526,6 +526,146 @@ namespace PretvoriKverijaMakroaVoVBA
             return ishod.ToString();
         }
 
+        public static string Pretvori(
+            string methodName,
+            string kveri,
+            List<ImeTabelaZamena> iminijaTabeliZameni,
+            string patekaEksel = null,
+            string imeIzlezenEkselFajl = null,
+            string imeRabotenList = null)
+        {
+            string tab = "  ";
+            StringBuilder ishod = new StringBuilder();
+            string[] rows;
+            int i = 0;
+            int k = 0;
+            StringBuilder redMetoda = new StringBuilder();
+
+            if (patekaEksel == null || patekaEksel.Equals(string.Empty))
+                patekaEksel = Environment.CurrentDirectory;
+
+            if (imeIzlezenEkselFajl == null || imeIzlezenEkselFajl.Equals(string.Empty))
+                imeIzlezenEkselFajl = "imeIzlezenEkselFajl";
+
+            if (imeRabotenList == null || imeRabotenList.Equals(string.Empty))
+                imeRabotenList = "imeRabotenList";
+
+            if (methodName.Equals(String.Empty))
+                return "methodName e prazen string";
+
+            if (methodName.IndexOf(" ") != -1)
+                methodName = methodName.Replace(" ", "_");
+
+            if (methodName.IndexOf("~") != -1)
+                methodName = methodName.Replace("~", "");
+
+            if (kveri.Equals(String.Empty))
+                return "prazno kveri";
+
+            if (iminijaTabeliZameni.Count == 0)
+                return "iminijaTabeli e nula";
+
+            if (iminijaTabeliZameni.Count == 0)
+                return "zamenaIminjaTabeli e nula";
+
+            //if (iminijaTabeli.Count != zamenaIminjaTabeli.Count)
+            //  return "brojot na iminja na tabeli i nivnite zameni ne e ednakov: " + iminijaTabeli.Count + ", " + zamenaIminjaTabeli.Count;
+
+            kveri = kveri.Replace("\"", "\"\"");
+
+            foreach (ImeTabelaZamena tbl in iminijaTabeliZameni)
+            {
+                kveri = ZameniCelZbor(kveri, tbl.ime, "\" & " + tbl.imeZamena + " & \"", true);
+                //kveri = kveri.Replace(imeTabela, "\" & " + zamenaIminjaTabeli[i] + " & \"");
+                i += 1;
+            }
+
+            imeRabotenList = methodName.Replace("_sql", "");
+
+            if (!kveri.ToUpper().Contains("INTO") && kveri.ToUpper().Contains("SELECT"))
+            {
+                redMetoda.Append("Public Function " + methodName + "(ByVal " + imeRabotenList + " As String, ");
+                File.AppendAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\..\\" + Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI, "Public Const " + imeRabotenList.ToUpper() + " As String = \"" + imeRabotenList + "\"\n");
+            }
+            else
+                redMetoda.Append("Public Function " + methodName + "(");
+
+            foreach (ImeTabelaZamena tbl in iminijaTabeliZameni)
+            {
+                if (kveri.Contains(tbl.imeZamena))
+                {
+                    if (Regex.Matches(redMetoda.ToString(), "OU=" + tbl.imeZamena).Count == 0)
+                    {
+                        redMetoda.Append("ByVal " + tbl.imeZamena + " As String ");
+
+                        if (k >= 0 && k < iminijaTabeliZameni.Count - 1)
+                        {
+                            redMetoda.Append(", ");
+                        }
+
+                        k += 1;
+                    }
+                }
+            }
+
+            // otstrani posledna zapirka ako metodot ima samo eden parametar. 
+            if (redMetoda[redMetoda.Length - 2].Equals(','))
+                redMetoda = redMetoda.Remove(redMetoda.Length - 3, 2);
+
+            redMetoda.Append(") As String\n");
+
+            ishod.Append(redMetoda.ToString());
+            ishod.Append(tab + "Dim sql as String\n");
+
+            rows = kveri.Split('\n');
+            foreach (string row in rows)
+            {
+                if (row.StartsWith("SELECT"))
+                {
+                    string[] sqlKoloni = row.Replace(", ", Konstanti.SPEC_KARAKTER_ZA_ZAMENA.ToString()).Split(Konstanti.SPEC_KARAKTER_ZA_ZAMENA);
+
+                    if (sqlKoloni.Length == 1)
+                        ishod.Append(tab + "sql = sql & \"" + sqlKoloni[0].Replace("\r", "") + " \" & vbNewLine\n");
+                    else
+                    {
+                        for (int kol = 0; kol < sqlKoloni.Length - 1; kol += 1)
+                        {
+                            ishod.Append(tab + "sql = sql & \"" + sqlKoloni[kol].Replace("\r", "") + ", \" & vbNewLine\n");
+                        }
+
+                        ishod.Append(tab + "sql = sql & \"" + sqlKoloni[sqlKoloni.Length - 1].Replace("\r", "") + " \" & vbNewLine\n");
+                    }
+                }
+                else
+                {
+                    if (!kveri.ToUpper().Contains("INTO") && kveri.ToUpper().Contains("SELECT") && row.ToUpper().Contains("FROM"))
+                    {
+                        if (!Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(null) && !Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Equals(string.Empty))
+                            patekaEksel = Properties.Settings.Default.PATEKA_IZVEZEN_EKSEL_FAJl.Replace("\\\\", "\\");
+
+                        if (!patekaEksel.EndsWith("\\"))
+                            patekaEksel += "\\";
+
+                        if (!Properties.Settings.Default.IME_NA_IZVEZEN_EKSEL_FAJL.Equals(null) && !Properties.Settings.Default.IME_NA_IZVEZEN_EKSEL_FAJL.Equals(string.Empty))
+                            imeIzlezenEkselFajl = Properties.Settings.Default.IME_NA_IZVEZEN_EKSEL_FAJL;
+
+                        if (!imeIzlezenEkselFajl.EndsWith(".xls"))
+                            imeIzlezenEkselFajl += ".xls";
+
+                        ishod.Append(tab + "sql = sql & " + PatekaEksel(imeRabotenList, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), imeIzlezenEkselFajl) + "\n");
+                        //ishod.Append(tab + "sql = sql & \"INTO [\" & " + imeRabotenList + " & \"] IN ''[Excel 8.0;Database=" + patekaEksel + imeIzlezenEkselFajl + "] \"\n");
+                    }
+
+                    ishod.Append(tab + "sql = sql & \"" + row.Replace("\r", "") + " \" & vbNewLine\n");
+                }
+            }
+
+            ishod.Append(tab + methodName + " = sql\n");
+            ishod.Append("End Function\n\n");
+
+            return ishod.ToString();
+        }
+
         public static string PatekaEksel(string imeRabotenList, string patekaEksel, string imeIzlezenEkselFajl)
         {
             string ExcelJetSQLStringSoPateka;
