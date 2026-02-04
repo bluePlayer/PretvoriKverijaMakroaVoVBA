@@ -26,6 +26,7 @@ namespace PretvoriKverijaMakroaVoVBA
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("----- VbaMakro -----" + Environment.NewLine);
 
             sb.Append("ime: " + ime + Environment.NewLine);
             sb.Append("patekaFajl: " + patekaFajl + Environment.NewLine);
@@ -33,7 +34,9 @@ namespace PretvoriKverijaMakroaVoVBA
             foreach (VbaKveri vbaKveri in kverija)
                 sb.Append(vbaKveri.ToString());
 
-            return base.ToString();
+            sb.Append(Environment.NewLine);
+
+            return sb.ToString();
         }
     }
 }

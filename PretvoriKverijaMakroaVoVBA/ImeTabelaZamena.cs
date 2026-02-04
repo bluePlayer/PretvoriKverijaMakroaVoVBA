@@ -15,6 +15,7 @@ namespace PretvoriKverijaMakroaVoVBA
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("----- ImeTabelaZamena -----" + Environment.NewLine);
 
             sb.Append("ime: " + ime + ", imeZamena: " + imeZamena + ", daliEMegjuTabela: " + daliEMegjuTabela + Environment.NewLine);
 

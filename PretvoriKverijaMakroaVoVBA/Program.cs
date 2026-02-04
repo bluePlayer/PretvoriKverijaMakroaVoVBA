@@ -20,6 +20,9 @@ namespace PretvoriKverijaMakroaVoVBA
             appState.IzvrshiPretvoranjeMakroaIKverija();
             appState.DodajTestTabeli();
 
+            Console.WriteLine(appState);
+            Console.ReadLine();
+
             //PretvoriJetSQLKverijaVoVBAUtils.IzveziIminjaTabeliKonstantiVoFajl();
             //PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranje();
             //PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranjeMakroaIKverija();

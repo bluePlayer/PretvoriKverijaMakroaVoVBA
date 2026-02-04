@@ -20,7 +20,11 @@ namespace PretvoriKverijaMakroaVoVBA
 
         public List<ImeTabelaZamena> iminjaTabeliZameni { get; set; }
 
+        public List<VbaConvertedMacro> listaVbaConvertedMacro { get; set; }
         public List<VbaMakro> listaVbaMakroa { get; set; }
+
+        // TODO da se dodade nova klasa za izvezenite Makroa i tuka lista od istite. 
+        // Se misli na makroata pretvoreni od Access vo VBA fajl.
 
         public AppState()
         {
@@ -37,11 +41,13 @@ namespace PretvoriKverijaMakroaVoVBA
 
             VchitajIminjaTabeliZameni();
 
-            listaVbaMakroa = new List<VbaMakro>();
+            VchitajListaConvertedMacro();
+            VchitajMakroaKverija();
         }
 
         public void VchitajIminjaTabeliZameni()
         {
+            // TODO da se dovrshi
             List<string> tabeli = new List<string>();
 
             foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
@@ -58,6 +64,65 @@ namespace PretvoriKverijaMakroaVoVBA
                     iminjaTabeliZameni.Add(imaTabelaZamena);
                     tabeli.Add(parTabeli[1]);
                 }
+            }
+        }
+
+        public void VchitajListaConvertedMacro()
+        {
+            // TODO da se dovrshi
+            listaVbaConvertedMacro = new List<VbaConvertedMacro>();
+
+            try
+            {
+                DirectoryInfo sqlMakroaDir = new DirectoryInfo(vbaMakroaPapka);
+                DirectoryInfo[] sqlKverijaDir = sqlMakroaDir.GetDirectories();
+
+                foreach (DirectoryInfo di in sqlKverijaDir)
+                {
+                    FileInfo[] vbaModuliFajlovi = di.GetFiles("*.bas").OrderBy(fi => fi.Name).ToArray();
+
+                    VbaConvertedMacro vbaConvertedMacro = new VbaConvertedMacro(this);
+                    vbaConvertedMacro.ime = vbaModuliFajlovi[0].Name;
+                    vbaConvertedMacro.patekaFajl = vbaModuliFajlovi[0].DirectoryName;
+                    vbaConvertedMacro.ConvertedMacro = File.ReadAllText(vbaModuliFajlovi[0].FullName);
+
+                    listaVbaConvertedMacro.Add(vbaConvertedMacro);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("VchitajListaConvertedMacro(): " + ex.Message + (ex.InnerException != null ? ex.InnerException.Message : string.Empty));
+            }
+        }
+
+        public void VchitajMakroaKverija()
+        {
+            // TODO da se dovrshi
+            listaVbaMakroa = new List<VbaMakro>();
+
+            try
+            {
+                DirectoryInfo sqlMakroaDir = new DirectoryInfo(vbaMakroaPapka);
+                DirectoryInfo[] sqlKverijaDir = sqlMakroaDir.GetDirectories();
+
+                foreach (DirectoryInfo di in sqlKverijaDir)
+                {
+                    FileInfo[] sqlKverijaFajlovi = di.GetFiles(vidNaFajl);
+                    StringBuilder newFileBuilder = new StringBuilder();
+
+                    VbaMakro vbaMakro = new VbaMakro(this);
+
+                    string fileName = di.Name;
+                    string moduleFileName = string.Empty;
+
+                    Console.WriteLine("Rabotam vo papka: " + di.Name);
+
+                    moduleFileName = fileName + "_SQL.bas";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("VchitajMakroaKverija(): " + ex.Message + (ex.InnerException != null ? ex.InnerException.Message : string.Empty));
             }
         }
 
@@ -179,6 +244,7 @@ namespace PretvoriKverijaMakroaVoVBA
         /// </summary>
         public void IzvrshiPretvoranjeMakroaIKverija()
         {
+            // TODO da se napolnat objekti od klasite VbaMakro i VbaKveri namesto da se odi peshki vo papkata 
             try
             {
                 DirectoryInfo sqlMakroaDir = new DirectoryInfo(vbaMakroaPapka);
@@ -400,6 +466,8 @@ namespace PretvoriKverijaMakroaVoVBA
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.Append("----- AppState -----" + Environment.NewLine);
+
             sb.Append("vidNaFajl: " + vidNaFajl + Environment.NewLine);
             sb.Append("imeNaIzvezenFajl: " + imeNaIzvezenFajl + Environment.NewLine);
             sb.Append("imeNaIzvezenEkselFajl: " + imeNaIzvezenEkselFajl + Environment.NewLine);
@@ -412,8 +480,13 @@ namespace PretvoriKverijaMakroaVoVBA
             foreach (ImeTabelaZamena imeTblZamena in iminjaTabeliZameni)
                 sb.Append(imeTblZamena.ToString());
 
+            foreach (VbaConvertedMacro vbaConvertedMacro in listaVbaConvertedMacro)
+                sb.Append(vbaConvertedMacro.ToString());
+
             foreach (VbaMakro vbaMakro in listaVbaMakroa)
                 sb.Append(vbaMakro.ToString());
+
+            sb.Append(Environment.NewLine);
 
             return sb.ToString();
         }

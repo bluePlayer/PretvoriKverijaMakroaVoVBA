@@ -27,6 +27,8 @@ namespace PretvoriKverijaMakroaVoVBA
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.Append("----- VbaKveri -----" + Environment.NewLine);
+
             sb.Append("ime: " + ime + Environment.NewLine);
             sb.Append("vid: " + vid.ToString() + Environment.NewLine);
             sb.Append("kveri: " + kveri + Environment.NewLine);
