@@ -42,9 +42,10 @@ namespace PretvoriKverijaMakroaVoVBA
             VchitajIminjaTabeliZameni();
 
             VchitajListaConvertedMacro();
-            //VchitajMakroaKverija();
 
             DodajTestTabeli();
+            IzvrshiPretvoranje();
+            IzveziIminjaTabeliKonstantiVoFajl();
         }
 
         public void VchitajIminjaTabeliZameni()
@@ -94,8 +95,6 @@ namespace PretvoriKverijaMakroaVoVBA
             }
         }
 
-        
-
         public void IzveziIminjaTabeliKonstantiVoFajl()
         {
             List<string> zamenaIminjaTabeli = new List<string>();
@@ -120,6 +119,100 @@ namespace PretvoriKverijaMakroaVoVBA
             iminjaTabeliKonstanti.Append(Environment.NewLine);
 
             File.WriteAllText(sqlKverijaPapka + "\\..\\" + imeFajlTabeliKonstanti, iminjaTabeliKonstanti.ToString());
+        }
+
+        /// <summary>
+        /// TODO da se zamenat zakucanite iminja na tabeli so tie od konfiguracija
+        /// Pretvora lista na kverija koi se vo tekstualen format vo dadena papka, vo VBA modul.
+        /// Ako ima 100 kverija, kje gi pretvori vo eden VBA modul so 100 funkcii koi vrakjaat SQL string 
+        /// (dinamichki SQL). 
+        /// </summary>
+        public void IzvrshiPretvoranje()
+        {
+            try
+            {
+                // Primeri pr = new Primeri();
+
+                DirectoryInfo sqlKverijaDir = new DirectoryInfo(Properties.Settings.Default.SQL_KVERIJA_PAPKA);
+                FileInfo[] sqlKverijaFajlovi = sqlKverijaDir.GetFiles(Properties.Settings.Default.VID_NA_FAJL);
+                StringBuilder newFileBuilder = new StringBuilder();
+                StringBuilder povikKverijaFunkcijaSB = new StringBuilder();
+                string fileName = Properties.Settings.Default.IME_NA_IZVEZEN_FAJL;
+
+                DirectoryInfo vbaMakroaKverijaDir = new DirectoryInfo(Properties.Settings.Default.VBA_MAKROA_PAPKA);
+                FileInfo[] vbaMakroaKverijaFajlovi = vbaMakroaKverijaDir.GetFiles(Properties.Settings.Default.VBA_MAKRO_VID_FAJL);
+
+                List<string> iminijaTabeli = new List<string>();
+                List<string> zamenaIminjaTabeli = new List<string>();
+
+                foreach (string tbl in Properties.Settings.Default.iminijaTabeli)
+                {
+                    string[] parTabeli = tbl.Split(Konstanti.ODDELUVACH_ZA_IMINJA_NA_TABELI);
+                    iminijaTabeli.Add(parTabeli[0]);
+                    zamenaIminjaTabeli.Add(parTabeli[1]);
+                }
+
+                // dodaj i otvori nova procedura koja gi povikuva kverijata vnatre
+                int brojKveri = 1;
+                povikKverijaFunkcijaSB.Append("Public Sub IzvrshiKverija()" + Environment.NewLine);
+                povikKverijaFunkcijaSB.Append("    Dim sql as String" + Environment.NewLine);
+                povikKverijaFunkcijaSB.Append("    sql = \"\"" + Environment.NewLine);
+                povikKverijaFunkcijaSB.Append("    DoCmd.SetWarnings False" + Environment.NewLine);
+
+                foreach (FileInfo file in sqlKverijaFajlovi)
+                {
+                    string contents = File.ReadAllText(file.FullName);
+
+                    string sqlString =
+                        PretvoriJetSQLKverijaVoVBAUtils.Pretvori(
+                            file.Name.Replace(".", "_"),
+                            contents,
+                            iminijaTabeli,
+                            zamenaIminjaTabeli,
+                            null,
+                            null,
+                            null);
+
+                    newFileBuilder.Append(sqlString);
+
+                    string kveriMetoda =
+                        sqlString.Split('\n')[0]
+                            .Replace("Public Function", string.Empty)
+                            .Replace("ByVal", string.Empty)
+                            .Replace("As String", string.Empty);
+
+                    povikKverijaFunkcijaSB.Append("    '-----" + brojKveri.ToString() + "-----" + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    sql = " + kveriMetoda + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    Debug.Print sql" + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append("    DoCmd.RunSQL (sql)" + Environment.NewLine);
+                    povikKverijaFunkcijaSB.Append(Environment.NewLine);
+
+                    brojKveri += 1;
+
+                    Console.WriteLine("Pretvoriv: " + file.Name + " vo VBA kod! ");
+                }
+
+                // zatvori procedura koja gi povikuva kverijata vnatre 
+                povikKverijaFunkcijaSB.Append("    DoCmd.SetWarnings True" + Environment.NewLine);
+                povikKverijaFunkcijaSB.Append("End Sub" + Environment.NewLine);
+
+                foreach (string zamenskaTabela in zamenaIminjaTabeli)
+                {
+                    povikKverijaFunkcijaSB = povikKverijaFunkcijaSB.Replace(
+                        zamenskaTabela,
+                        Properties.Settings.Default.IME_FAJL_TABELI_KONSTANTI.Replace("bas", string.Empty) + zamenskaTabela);
+                }
+
+                File.AppendAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\" + fileName, newFileBuilder.ToString());
+                File.AppendAllText(Properties.Settings.Default.SQL_KVERIJA_PAPKA + "\\" + fileName, povikKverijaFunkcijaSB.ToString());
+
+                Console.WriteLine("Zavrshiv so pretvaranje na kverijata vo VBA kod! ");
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Greshka: " + ex.Message);
+            }
         }
 
         // TODO da se zamenat zakucanite iminja na tabeli so tie od konfiguracija
