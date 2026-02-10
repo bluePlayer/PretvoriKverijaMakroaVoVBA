@@ -68,7 +68,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="VbaConvertedMacro.cs" />
     <Compile Include="VbaKveri.cs" />
     <Compile Include="VbaMakro.cs" />
   </ItemGroup>

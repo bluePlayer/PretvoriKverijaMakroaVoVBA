@@ -15,18 +15,12 @@ namespace PretvoriKverijaMakroaVoVBA
             appState = new AppState();
             Console.WriteLine(appState);
 
-            appState.IzveziIminjaTabeliKonstantiVoFajl();
-            appState.IzvrshiPretvoranje();
-            appState.IzvrshiPretvoranjeMakroaIKverija();
-            appState.DodajTestTabeli();
-
-            Console.WriteLine(appState);
-            Console.ReadLine();
-
             //PretvoriJetSQLKverijaVoVBAUtils.IzveziIminjaTabeliKonstantiVoFajl();
             //PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranje();
             //PretvoriJetSQLKverijaVoVBAUtils.IzvrshiPretvoranjeMakroaIKverija();
             //PretvoriJetSQLKverijaVoVBAUtils.DodajTestTabeli();
+
+            Console.ReadLine();
         }
     }
 }

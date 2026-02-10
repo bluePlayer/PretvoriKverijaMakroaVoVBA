@@ -10,17 +10,51 @@ namespace PretvoriKverijaMakroaVoVBA
     {
         public AppState appState { get; set; }
 
-        public string ime { get; set; }
-        public int vid { get; set; }
-        public string kveri { get; set; }
+        public string ime { get; private set; }
 
-        public List<string> tabeli { get; set; }
+        private string _imeFajl;
+        public string imeFajl
+        {
+            get
+            {
+                return _imeFajl;
+            }
+            set
+            {
+                _imeFajl = value;
+                ime = _imeFajl.Split('.')[0];
+            }
+        }
+
+        public int vid { get; set; }
+
+        private string _kveri;
+        public string Kveri
+        {
+            get
+            {
+                return _kveri;
+            }
+            set
+            {
+                _kveri = value;
+
+                tabeli = new List<ImeTabelaZamena>();
+
+                foreach (ImeTabelaZamena tabela in appState.iminjaTabeliZameni)
+                {
+                    if (_kveri.Contains(tabela.ime))
+                        tabeli.Add(tabela);
+                }
+            }
+        }
+        public string patekaFajl { get; set; }
+
+        public List<ImeTabelaZamena> tabeli { get; set; }
 
         public VbaKveri(AppState appState)
         {
             this.appState = appState;
-
-            tabeli = new List<string>();
         }
 
         public override string ToString()
@@ -31,10 +65,10 @@ namespace PretvoriKverijaMakroaVoVBA
 
             sb.Append("ime: " + ime + Environment.NewLine);
             sb.Append("vid: " + vid.ToString() + Environment.NewLine);
-            sb.Append("kveri: " + kveri + Environment.NewLine);
+            sb.Append("kveri: " + Kveri + Environment.NewLine);
 
-            foreach (string tbl in tabeli)
-                sb.Append(tbl + Environment.NewLine);
+            foreach (ImeTabelaZamena tbl in tabeli)
+                sb.Append(tbl.ToString() + Environment.NewLine);
 
             return sb.ToString();
         }

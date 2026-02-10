@@ -89,6 +89,7 @@ namespace PretvoriKverijaMakroaVoVBA
                         if (makroLinija.Contains("SetWarnings"))
                         {
                             writeLines.Append("    Dim sql as String" + Environment.NewLine);
+                            writeLines.Append("    sql = \"\"" + Environment.NewLine);
                         }
 
                         if (!makroLinija.Contains("OpenQuery"))
@@ -209,6 +210,7 @@ namespace PretvoriKverijaMakroaVoVBA
                 int brojKveri = 1;
                 povikKverijaFunkcijaSB.Append("Public Sub IzvrshiKverija()" + Environment.NewLine);
                 povikKverijaFunkcijaSB.Append("    Dim sql as String" + Environment.NewLine);
+                povikKverijaFunkcijaSB.Append("    sql = \"\"" + Environment.NewLine);
                 povikKverijaFunkcijaSB.Append("    DoCmd.SetWarnings False" + Environment.NewLine);
 
                 foreach (FileInfo file in sqlKverijaFajlovi)
@@ -312,6 +314,7 @@ namespace PretvoriKverijaMakroaVoVBA
             
             ishod.Append("Public Sub DodajTestTabeli()" + Environment.NewLine);
             ishod.Append("    Dim sql as String" + Environment.NewLine);
+            ishod.Append("    sql = \"\"" + Environment.NewLine);
             ishod.Append("    DoCmd.SetWarnings False" + Environment.NewLine);
             ishod.Append(Environment.NewLine);
 
@@ -344,6 +347,7 @@ namespace PretvoriKverijaMakroaVoVBA
             ishod.Append(Environment.NewLine);
             ishod.Append("Public Sub brishiMegjuTabeli()" + Environment.NewLine);
             ishod.Append("    Dim sql as String" + Environment.NewLine);
+            ishod.Append("    sql = \"\"" + Environment.NewLine);
             ishod.Append("    DoCmd.SetWarnings False" + Environment.NewLine);
             ishod.Append(Environment.NewLine);
 
@@ -476,6 +480,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
             ishod.Append(redMetoda.ToString());
             ishod.Append(tab + "Dim sql as String\n");
+            ishod.Append(tab + "sql = \"\"\n");
 
             rows = kveri.Split('\n');
             foreach (string row in rows)
@@ -616,6 +621,7 @@ namespace PretvoriKverijaMakroaVoVBA
 
             ishod.Append(redMetoda.ToString());
             ishod.Append(tab + "Dim sql as String\n");
+            ishod.Append(tab + "sql = \"\"\n");
 
             rows = kveri.Split('\n');
             foreach (string row in rows)
