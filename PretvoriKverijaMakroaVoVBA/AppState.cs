@@ -266,18 +266,18 @@ namespace PretvoriKverijaMakroaVoVBA
                 {
                     pomIminjaTabeli.Add(tbl.imeZamena);
 
-                    if (!tbl.daliEMegjuTabela)
-                    {
+                    if (tbl.daliEMegjuTabela)
                         imeTabela = imeFajlTabeliKonstanti.Split('.')[0] + "." + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + tbl.imeZamena.ToUpper();
-                        imeTestTabela = imeTabela + "_TEST";
-                        ishod.Append("    If Utils.daliTabelataPostoi(" + imeTestTabela + ", CurrentDb) Then " + Environment.NewLine);
-                        ishod.Append("        sql = \"drop table \" & " + imeTestTabela + " " + Environment.NewLine);
-                        ishod.Append("        Debug.Print sql" + Environment.NewLine);
-                        ishod.Append("        DoCmd.RunSQL sql" + Environment.NewLine);
-                        ishod.Append("    End If");
-                        ishod.Append(Environment.NewLine);
-                        ishod.Append(Environment.NewLine);
-                    }
+                    else
+                        imeTabela = imeFajlTabeliKonstanti.Split('.')[0] + "." + Konstanti.PRETSTAVKA_IME_TABELA_KONSTANTA + tbl.imeZamena.ToUpper() + "_TEST";
+
+                    ishod.Append("    If Utils.daliTabelataPostoi(" + imeTabela + ", CurrentDb) Then " + Environment.NewLine);
+                    ishod.Append("        sql = \"drop table \" & " + imeTabela + " " + Environment.NewLine);
+                    ishod.Append("        Debug.Print sql" + Environment.NewLine);
+                    ishod.Append("        DoCmd.RunSQL sql" + Environment.NewLine);
+                    ishod.Append("    End If");
+                    ishod.Append(Environment.NewLine);
+                    ishod.Append(Environment.NewLine);
                 }
             }
 
