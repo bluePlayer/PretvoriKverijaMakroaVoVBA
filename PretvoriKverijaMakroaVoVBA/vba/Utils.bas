@@ -18,27 +18,27 @@ Public Sub IzveziKverijaIMakroaVoModuli(ByVal pateka As String)
     Dim txt As Object
     Dim db As DAO.Database
     Dim qdf As DAO.QueryDef
-    
+
     Const ForReading = 1, TristateUseDefault = -2
-    
+
     On Error GoTo Error_OpenOptionsDialog
     
     Set fs = CreateObject("Scripting.FileSystemObject")
     Set db = CurrentDb
 
     For Each obj In CurrentProject.AllMacros
-    
+
         moduleName = Konstanti.MAKRO_PRETSTAVKA_ZA_IZVEZUVANJE & obj.Name
-        
+
         If Not DaliPostoiModulot(moduleName) Then
             DoCmd.SelectObject acMacro, obj.Name, True
             DoCmd.RunCommand acCmdConvertMacrosToVisualBasic
-            
+
             DoCmd.Save acModule, moduleName
         End If
-        
-        CreateFolderIfNotExists (pateka & obj.Name)
-        
+
+        CreateFolderIfNotExists(pateka & obj.Name)
+
         DoCmd.SelectObject acModule, moduleName, True
         Application.SaveAsText acModule, moduleName, pateka & obj.Name & "\" & obj.Name & ".bas"
 
@@ -48,12 +48,12 @@ Public Sub IzveziKverijaIMakroaVoModuli(ByVal pateka As String)
             
             Do While makroFajl.AtEndOfStream <> True
                 strTmp = makroFajl.ReadLine
-                
+
                 If Len(strTmp) > 0 Then
-                
+
                     If InStr(1, strTmp, "OpenQuery", vbTextCompare) > 0 Then
-                        
-                        
+
+
                         If InStr(1, strTmp, qdf.Name, vbTextCompare) > 0 Then
                             Set txt = fs.CreateTextFile(pateka & obj.Name & "\" & qdf.Name & ".sql", True)
                             txt.WriteLine qdf.sql
@@ -62,16 +62,126 @@ Public Sub IzveziKverijaIMakroaVoModuli(ByVal pateka As String)
                     End If
                 End If
             Loop
-            
+
         Next qdf
-        
+
         makroFajl.Close
-    
+
     Next obj
-    
+
     ' Display a message box when the export is complete
     MsgBox "Export complete!", vbInformation, "Export Query SQL"
+
+Exit_OpenOptionsDialog:
+    Exit Sub
+
+Error_OpenOptionsDialog:
+    MsgBox Err & ": " & Err.Description
+    Resume Exit_OpenOptionsDialog
+End Sub
+
+Public Sub IzveziKverijaIMakroaVoModuli2(ByVal pateka As String)
+    Dim obj As AccessObject
+    Dim moduleName, strTmp As String
+    Dim makroFajl, oFolder
+    Dim fs As Object
+    Dim txt As Object
+    Dim db As DAO.Database
+    Dim qdf As DAO.QueryDef
+    Dim queryNum As Integer
+    Dim queryName As String
+    Dim makroContents As Object
+
+    Const ForReading = 1, TristateUseDefault = -2
+
+    On Error GoTo Error_OpenOptionsDialog
     
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    Set db = CurrentDb
+    
+    queryNum = 0
+
+    For Each obj In CurrentProject.AllMacros
+
+        moduleName = Konstanti.MAKRO_PRETSTAVKA_ZA_IZVEZUVANJE & obj.Name
+
+        If Not DaliPostoiModulot(moduleName) Then
+            DoCmd.SelectObject acMacro, obj.Name, True
+            DoCmd.RunCommand acCmdConvertMacrosToVisualBasic
+
+            DoCmd.Save acModule, moduleName
+        End If
+
+        DoCmd.SelectObject acModule, moduleName, True
+        Application.SaveAsText acModule, moduleName, pateka & obj.Name & ".bas"
+
+
+
+        queryNum = 0
+        For Each qdf In db.QueryDefs
+            queryNum = queryNum + 1
+            queryName = qdf.Name
+            'Debug.Print qdf.Name
+            'If InStr(1, qdf.Name, "Regioni_0", vbTextCompare) > 0 Then
+            Set makroFajl = fs.OpenTextFile(pateka & obj.Name & ".bas", ForReading, True, TristateUseDefault)
+            
+            Do While makroFajl.AtEndOfStream <> True
+                strTmp = Replace(makroFajl.ReadLine, " ", "")
+                On Error GoTo Error_OpenOptionsDialog
+                'Debug.Print strTmp
+                If Len(strTmp) > 0 Then
+                    On Error GoTo Error_OpenOptionsDialog
+
+                    If InStr(1, strTmp, "OpenQuery", vbTextCompare) > 0 Then
+                        CreateFolderIfNotExists(pateka & obj.Name)
+
+                        Debug.Print Replace(strTmp, """", " ") & ", " & Replace(queryName, "~", "") & ", broj kveri: " & CStr(queryNum)
+                        On Error GoTo Error_OpenOptionsDialog
+
+                        If InStr(1, Replace(strTmp, """", " "), Replace(queryName, "~", ""), vbTextCompare) > 0 Then
+                            On Error GoTo Error_OpenOptionsDialog
+                            Set txt = fs.CreateTextFile(pateka & obj.Name & "\" & queryName & ".sql", True)
+                            txt.writeline qdf.sql
+                            txt.Close
+                        End If
+                    End If
+                End If
+            Loop
+            'End If
+        Next qdf
+
+        makroFajl.Close
+
+        'Set makroContents = Utils.ReadEntireFile(pateka & obj.Name & ".bas")
+        Dim fso As Object, txtStream As Object
+        Dim ishod As String
+        ' Create object, open file (1=ForReading), read all, and close
+        Set fso = CreateObject("Scripting.FileSystemObject")
+        Set txtStream = fso.OpenTextFile(pateka & obj.Name & ".bas", 1)
+        ishod = txtStream.readall  ' Output content
+
+
+        If InStr(1, ishod, "SetWarnings", vbTextCompare) = 0 Then
+            'MsgBox ("fajlot: " & pateka & obj.Name & ".bas" & ", nema kod!")
+            txtStream.Close
+
+            Dim pos As Long
+
+            pos = InStr(1, ishod, "()", vbTextCompare) + 2
+            ishod = Insert(ishod, " DoCmd.SetWarnings False ", pos)
+            ' TODO file must be open to find specific row and then append row
+            Set txtStream2 = fso.OpenTextFile(pateka & obj.Name & ".bas", 2)
+            'txtStream2.readall
+            'txtStream2.writeline ishod
+            txtStream2.Close
+        End If
+
+
+    Next obj
+
+    ' Display a message box when the export is complete
+    MsgBox "Export complete!", vbInformation, "Export Query SQL"
+
 Exit_OpenOptionsDialog:
     Exit Sub
 
@@ -81,7 +191,7 @@ Error_OpenOptionsDialog:
 End Sub
 
 Public Sub ExportQuerySQL(ByVal strPath As String)
-On Error GoTo Greshka
+    On Error GoTo Greshka
 
     Dim db As DAO.Database
     Dim qdf As DAO.QueryDef
@@ -117,10 +227,10 @@ On Error GoTo Greshka
         txt.WriteLine qdf.sql
         txt.Close
     Next qdf
-   
+
     ' Display a message box when the export is complete
     MsgBox "Export complete!", vbInformation, "Export Query SQL"
-    
+
 izlez:
     Exit Sub
 
@@ -133,22 +243,22 @@ End Sub
 Public Function DaliPostoiModulot(ByVal moduleName As String) As Boolean
     Dim existingModule As AccessObject
     Dim postoi As Boolean
-    
+
     postoi = False
-    
+
     For Each existingModule In CurrentProject.AllModules
         If existingModule.Name = moduleName Then
             postoi = True
         End If
     Next existingModule
-    
+
     DaliPostoiModulot = postoi
 End Function
 
 Public Function daliTabelataPostoi(ByVal imeNaTabela As String, ByRef db As DAO.Database) As Boolean
     Dim msg As String
     Dim postoi As Boolean
-    
+
     postoi = False
 
     For Each tbl In db.TableDefs
@@ -156,12 +266,12 @@ Public Function daliTabelataPostoi(ByVal imeNaTabela As String, ByRef db As DAO.
             postoi = True
             GoTo zavrshiv
         End If
-    
+
     Next tbl
-    
+
 zavrshiv:
     daliTabelataPostoi = postoi
-    
+
 End Function
 
 Public Sub PretvoriMakroaVoModuliISnimiNaDisk(ByVal pateka As String, Optional ByVal stvoriPapkiZaMakroa As Boolean = False)
@@ -169,32 +279,32 @@ Public Sub PretvoriMakroaVoModuliISnimiNaDisk(ByVal pateka As String, Optional B
     Dim moduleName As String
     Dim fs As Object
     Dim txt As Object
-    
+
     On Error GoTo Error_OpenOptionsDialog
 
     For Each obj In CurrentProject.AllMacros
-    
+
         moduleName = Konstanti.MAKRO_PRETSTAVKA_ZA_IZVEZUVANJE & obj.Name
-        
+
         ' TODO da se dodade kod za pravenje papka so imeto na modulot/makroto kade potoa bi se smestile kverijata
         ' koi se povikuvaat vo modulot/makroto
         ' so koristenje na CreateFolderIfNotExists()
         'If obj.IsDependentUpon(acQuery, "godisnikTQ_10_1") = True Then
         '    MsgBox obj.Name & " zavisi od kverito godisnikTQ_10_1"
         'End If
-        
+
         If Not DaliPostoiModulot(moduleName) Then
             DoCmd.SelectObject acMacro, obj.Name, True
             DoCmd.RunCommand acCmdConvertMacrosToVisualBasic
-            
+
             DoCmd.Save acModule, moduleName
         End If
-        
+
         DoCmd.SelectObject acModule, moduleName, True
         Application.SaveAsText acModule, moduleName, pateka & obj.Name & ".bas"
-    
+
     Next obj
-    
+
 Exit_OpenOptionsDialog:
     Exit Sub
 
