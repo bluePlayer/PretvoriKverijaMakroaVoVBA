@@ -1,3 +1,15 @@
+Public Function StvoriTestTabela_SQL(ByVal imeTestTabela As String, ByVal imeTabela As String) As String
+    Dim sql As String
+    sql = "SELECT * INTO " & imeTestTabela & " FROM " & imeTabela & " "
+    StvoriTestTabela_SQL = sql
+End Function
+
+Public Function dropTable_SQL(ByVal tableName As String) As String
+    Dim sql As String
+    sql = "DROP TABLE " & tableName & ";"
+    dropTable_SQL = sql
+End Function
+
 Public Function ExcelJetSQLStringSoPateka(ByVal imeProverka As String, ByVal patekaXLSFajl As String, ByVal imeXLSFajl As String) As String
     If Right(patekaXLSFajl, 1) = "\" Then
         ExcelJetSQLStringSoPateka = " INTO [" & imeProverka & "] IN ''[Excel 8.0;Database=" & patekaXLSFajl & imeXLSFajl & "]"
@@ -172,7 +184,7 @@ Public Sub IzveziKverijaIMakroaVoModuli2(ByVal pateka As String)
             ' TODO file must be open to find specific row and then append row
             Set txtStream2 = fso.OpenTextFile(pateka & obj.Name & ".bas", 2)
             'txtStream2.readall
-            'txtStream2.writeline ishod
+            txtStream2.writeline ishod
             txtStream2.Close
         End If
 
