@@ -152,7 +152,7 @@ End Function
 ```vb
 Public Function Regioni_0_sql(ByVal TabelaVnes As String , ByVal TabelaNasMesta As String ) As String
   Dim sql as String
-  sql = sql & "SELECT ""[V-50 "" AS OBRAZEC, " & vbNewLine
+  sql = sql & "SELECT ""VBAProba "" AS OBRAZEC, " & vbNewLine
   sql = sql & "" & TabelaVnes & ".GOD, " & vbNewLine
   sql = sql & """0"" AS REGIONID, " & vbNewLine
   sql = sql & """Republika Makedonija"" AS REGION, " & vbNewLine
@@ -161,7 +161,7 @@ Public Function Regioni_0_sql(ByVal TabelaVnes As String , ByVal TabelaNasMesta 
   sql = sql & "Sum(IIf([pol]=""2"",1,0)) AS Zeni, " & vbNewLine
   sql = sql & "" & TabelaVnes & ".ZDRZAVA INTO Regioni_1 " & vbNewLine
   sql = sql & "FROM " & TabelaVnes & " LEFT JOIN " & TabelaNasMesta & " ON " & TabelaVnes & ".ZNASMES = " & TabelaNasMesta & ".NASID" & vbNewLine
-  sql = sql & "GROUP BY ""[V-50 "", " & TabelaVnes & ".GOD, ""0"", ""Republika Makedonija"", " & TabelaVnes & ".ZDRZAVA" & vbNewLine
+  sql = sql & "GROUP BY ""VBAProba "", " & TabelaVnes & ".GOD, ""0"", ""Republika Makedonija"", " & TabelaVnes & ".ZDRZAVA" & vbNewLine
   sql = sql & "HAVING (((" & TabelaVnes & ".ZDRZAVA)=""807""));" & vbNewLine
   sql = sql & "" & vbNewLine
   sql = sql & "" & vbNewLine
@@ -171,7 +171,7 @@ End Function
 Public Function Regioni_01_sql(ByVal TabelaVnes As String , ByVal TabelaNasMesta As String ) As String
   Dim sql as String
   sql = sql & "INSERT INTO Regioni_1 ( OBRAZEC, GOD, REGIONID, REGION, SE, Mazi, Zeni, ZDRZAVA )" & vbNewLine
-  sql = sql & "SELECT ""[V-50 "" AS OBRAZEC, " & vbNewLine
+  sql = sql & "SELECT ""VBAProba "" AS OBRAZEC, " & vbNewLine
   sql = sql & "" & TabelaVnes & ".GOD, " & vbNewLine
   sql = sql & "" & TabelaNasMesta & ".REGIONID, " & vbNewLine
   sql = sql & "" & TabelaNasMesta & ".REGION, " & vbNewLine
@@ -180,7 +180,7 @@ Public Function Regioni_01_sql(ByVal TabelaVnes As String , ByVal TabelaNasMesta
   sql = sql & "Sum(IIf([pol]=""2"",1,0)) AS Zeni, " & vbNewLine
   sql = sql & "" & TabelaVnes & ".ZDRZAVA " & vbNewLine
   sql = sql & "FROM " & TabelaVnes & " INNER JOIN " & TabelaNasMesta & " ON " & TabelaVnes & ".ZNASMES = " & TabelaNasMesta & ".NASID" & vbNewLine
-  sql = sql & "GROUP BY ""[V-50 "", " & TabelaVnes & ".GOD, " & TabelaNasMesta & ".REGIONID, " & TabelaNasMesta & ".REGION, " & TabelaVnes & ".ZDRZAVA" & vbNewLine
+  sql = sql & "GROUP BY ""VBAProba "", " & TabelaVnes & ".GOD, " & TabelaNasMesta & ".REGIONID, " & TabelaNasMesta & ".REGION, " & TabelaVnes & ".ZDRZAVA" & vbNewLine
   sql = sql & "HAVING (((" & TabelaVnes & ".ZDRZAVA)=""807""));" & vbNewLine
   sql = sql & "" & vbNewLine
   sql = sql & "" & vbNewLine
@@ -224,11 +224,11 @@ Public Sub DodajTestTabeli()
     Dim sql as String
     DoCmd.SetWarnings False
 
-    sql = "select " & VOI50_IminjaTabeli.TBL_TABELAVNES & ".* into " & VOI50_IminjaTabeli.TBL_TABELAVNES_TEST & " from " & VOI50_IminjaTabeli.TBL_TABELAVNES 
+    sql = "select " & VBAProba_IminjaTabeli.TBL_TABELAVNES & ".* into " & VBAProba_IminjaTabeli.TBL_TABELAVNES_TEST & " from " & VBAProba_IminjaTabeli.TBL_TABELAVNES 
     Debug.Print sql
     DoCmd.RunSQL (sql) 
 
-    sql = "select " & VOI50_IminjaTabeli.TBL_TABELANASMESTA & ".* into " & VOI50_IminjaTabeli.TBL_TABELANASMESTA_TEST & " from " & VOI50_IminjaTabeli.TBL_TABELANASMESTA 
+    sql = "select " & VBAProba_IminjaTabeli.TBL_TABELANASMESTA & ".* into " & VBAProba_IminjaTabeli.TBL_TABELANASMESTA_TEST & " from " & VBAProba_IminjaTabeli.TBL_TABELANASMESTA 
     Debug.Print sql
     DoCmd.RunSQL (sql) 
 
@@ -239,14 +239,14 @@ Public Sub brishiMegjuTabeli()
     Dim sql as String
     DoCmd.SetWarnings False
 
-    If Utils.daliTabelataPostoi(VOI50_IminjaTabeli.TBL_TABELAVNES_TEST, CurrentDb) Then 
-        sql = "drop table " & VOI50_IminjaTabeli.TBL_TABELAVNES_TEST 
+    If Utils.daliTabelataPostoi(VBAProba_IminjaTabeli.TBL_TABELAVNES_TEST, CurrentDb) Then 
+        sql = "drop table " & VBAProba_IminjaTabeli.TBL_TABELAVNES_TEST 
         Debug.Print sql
         DoCmd.RunSQL sql
     End If
 
-    If Utils.daliTabelataPostoi(VOI50_IminjaTabeli.TBL_TABELANASMESTA_TEST, CurrentDb) Then 
-        sql = "drop table " & VOI50_IminjaTabeli.TBL_TABELANASMESTA_TEST 
+    If Utils.daliTabelataPostoi(VBAProba_IminjaTabeli.TBL_TABELANASMESTA_TEST, CurrentDb) Then 
+        sql = "drop table " & VBAProba_IminjaTabeli.TBL_TABELANASMESTA_TEST 
         Debug.Print sql
         DoCmd.RunSQL sql
     End If
@@ -259,11 +259,11 @@ End Sub
 
 ```vb
 Private Sub brishiMegjuTabeliBtn_Click()
-    Call VOI50_Proba.brishiMegjuTabeli
+    Call VBA_Proba.brishiMegjuTabeli
 End Sub
 
 Private Sub dodajTestTabeliBtn_Click()
-    Call VOI50_Proba.DodajTestTabeli
+    Call VBA_Proba.DodajTestTabeli
 End Sub
 ```
 Инаку првата функција ќе створи тест табели од серверските, и истите ќе имаат и дизајн како на серверските табели. Ова е погодно да тестираме нови кверија на тест табели наместо на серверси. 
